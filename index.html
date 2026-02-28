@@ -42,10 +42,12 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   cursor: crosshair;
+  -webkit-text-size-adjust: 100%;
+  touch-action: pan-y;
 }
 
 /* ── STAR CANVAS ── */
-#cv { position:fixed; inset:0; z-index:0; pointer-events:none }
+#cv { position:fixed; inset:0; z-index:0; pointer-events:none; touch-action:none; }
 
 /* ── NEBULA ── */
 .neb { position:fixed; inset:0; z-index:0; pointer-events:none }
@@ -66,7 +68,7 @@ body {
 @keyframes ndb { from{transform:scale(1) translate(0,0)} to{transform:scale(1.06) translate(-18px,24px)} }
 
 /* ── SPACECRAFT CANVAS ── */
-#ship-cv { position:fixed; inset:0; z-index:1; pointer-events:none }
+#ship-cv { position:fixed; inset:0; z-index:1; pointer-events:none; touch-action:none; }
 
 /* SCAN LINE */
 body::after {
@@ -148,7 +150,7 @@ body::after {
 @keyframes blink { 0%,100%{opacity:.3} 50%{opacity:1} }
 
 /* ── HEADER ── */
-#app { position: relative; z-index: 2; }
+#app { position: relative; z-index: 2; isolation: isolate; }
 
 header {
   position: sticky; top: 0; z-index: 100;
@@ -667,15 +669,56 @@ header::after {
 }
 
 /* ── RESPONSIVE ── */
-@media(max-width: 900px) {
+@media(max-width: 1024px) {
+  .ea-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media(max-width: 768px) {
+  /* layout */
   .ea-grid { grid-template-columns: 1fr; }
-  header, .hero, .main { padding-left: 20px; padding-right: 20px; }
-  .d-header { padding: 0 20px; }
-  .d-content { padding: 24px 20px; }
-  .d-hero { grid-template-columns: 1fr; }
+  header { padding: 0 16px; height: 56px; }
+  .hero { padding: 32px 16px 28px; }
+  .main { padding: 24px 16px; }
+
+  /* header — hide clock and corner on small screens */
+  .hdr-corner { display: none; }
+  .hdr-time { font-size: 11px; }
+  .sys-status { display: none; }
+
+  /* logo */
+  .logo-tag { display: none; }
+  .logo-main { font-size: 15px; letter-spacing: 4px; }
+  .logo-orb { width: 22px; height: 22px; }
+
+  /* hero */
+  .hero-balance { font-size: clamp(36px, 10vw, 56px); }
+  .hero-balance-label { font-size: 9px; }
+  .hero-top { font-size: 9px; }
+  .hero-stats { gap: 0; flex-wrap: wrap; }
+  .hero-stat { padding: 0 16px 16px 0; margin-right: 16px; }
+  .hs-value { font-size: 20px; }
+  .hs-label { font-size: 9px; }
+
+  /* cards */
+  .card-profit-value { font-size: 28px; }
+  .card-name { font-size: 17px; }
+
+  /* detail page */
+  .d-header { padding: 0 16px; }
+  .d-content { padding: 20px 16px; }
+  .d-hero { grid-template-columns: 1fr; gap: 24px; }
   .d-hero-right { text-align: left; }
   .d-stats-grid { grid-template-columns: repeat(2, 1fr); }
-  .d-balance { font-size: 36px; }
+  .d-ea-name { font-size: 36px; }
+  .d-balance { font-size: 32px; }
+  .d-profit-big { font-size: 26px; }
+  .d-panel-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+}
+
+@media(max-width: 400px) {
+  .hero-balance { font-size: 32px; }
+  .hero-stat { padding: 0 12px 14px 0; margin-right: 12px; }
+  .d-stats-grid { grid-template-columns: 1fr 1fr; }
 }
 
 /* ── CORNER DECORATIONS ── */
@@ -1312,7 +1355,7 @@ async function init(){
   ];
 
   function mk(){
-    W=cv.width=innerWidth; H=cv.height=innerHeight; stars=[];
+    W=cv.width=window.innerWidth; H=cv.height=window.innerHeight; stars=[];
     LAYERS.forEach(L=>{
       const n=Math.round(W*H/3000*L.f*3);
       for(let i=0;i<n;i++) stars.push({
@@ -1368,7 +1411,7 @@ async function init(){
   const cx = cv.getContext('2d');
   let W, H;
 
-  function resize(){ W = cv.width = innerWidth; H = cv.height = innerHeight; }
+  function resize(){ W = cv.width = window.innerWidth; H = cv.height = window.innerHeight; }
   resize(); addEventListener('resize', resize);
 
   // Ship definitions — each has a path-drawing function, scale, speed, depth
@@ -1567,12 +1610,14 @@ async function init(){
     });
   }
 
-  // Initial ships
-  for(let i=0;i<2;i++){
+  // Initial ships - reduce on mobile
+  const isMobile = window.innerWidth < 768;
+  const maxShips = isMobile ? 1 : 2;
+  for(let i=0;i<maxShips;i++){
     setTimeout(()=>spawnShip(), i * 8000 + 2000);
   }
   setInterval(()=>{
-    if(SHIPS.length < 2) spawnShip();
+    if(SHIPS.length < maxShips) spawnShip();
   }, 14000);
 
   let t = 0;
