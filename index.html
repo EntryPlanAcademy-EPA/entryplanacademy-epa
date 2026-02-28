@@ -1,430 +1,1266 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EntryPlan Academy — Live Performance</title>
+<title>EntryPlan Academy — Systems Online</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
-:root{--bg:#080a0d;--bg2:#0e1117;--bg3:#141920;--border:#1c2330;--accent:#c8a85a;--accent2:#e6c97a;--green:#2dd4a0;--red:#f25c6e;--blue:#60a5fa;--text:#dde3ed;--muted:#556070;--card:#0f1318;}
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
-body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.4;}
-header{border-bottom:1px solid var(--border);padding:0 48px;display:flex;align-items:center;justify-content:space-between;height:68px;position:sticky;top:0;background:rgba(8,10,13,0.92);backdrop-filter:blur(20px);z-index:100;}
-.logo-text{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;}
-.logo-text span{color:var(--accent);}
-.logo-sub{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;}
-.live-badge{display:flex;align-items:center;gap:7px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1.5px;color:var(--green);text-transform:uppercase;}
-.live-dot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(1.3);}}
-.hero{padding:48px 48px 36px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
-.hero::before{content:'EPA';position:absolute;right:-20px;top:-20px;font-family:'Bebas Neue',sans-serif;font-size:240px;color:rgba(200,168,90,0.025);pointer-events:none;line-height:1;}
-.hero-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-bottom:12px;}
-.hero-total{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,7vw,80px);letter-spacing:2px;line-height:1;margin-bottom:32px;}
-.hero-row{display:flex;gap:40px;flex-wrap:wrap;}
-.hero-stat-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:5px;}
-.hero-stat-value{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;}
-.hero-stat-value.green{color:var(--green);}
-.hero-stat-value.red{color:var(--red);}
-.hero-stat-value.gold{color:var(--accent2);}
-.hero-stat-value.muted{color:var(--muted);font-size:18px;}
-.main{max-width:1300px;margin:0 auto;padding:40px 48px;}
-.section-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:12px;}
-.section-label::after{content:'';flex:1;height:1px;background:var(--border);}
-.ea-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:48px;}
-@media(max-width:900px){.ea-grid{grid-template-columns:1fr;}header{padding:0 20px;}.hero{padding:36px 20px 28px;}.main{padding:28px 20px;}}
-.ea-card{background:var(--card);border:1px solid var(--border);border-radius:2px;overflow:hidden;transition:all 0.25s;cursor:pointer;}
-.ea-card:hover{border-color:rgba(200,168,90,0.35);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,0.4);}
-.ea-card-top-bar{height:3px;width:100%;}
-.bar-gold{background:linear-gradient(90deg,var(--accent),var(--accent2));}
-.bar-green{background:linear-gradient(90deg,var(--green),#16a37a);}
-.bar-blue{background:linear-gradient(90deg,var(--blue),#3b82f6);}
-.ea-card-header{padding:20px 22px 16px;border-bottom:1px solid var(--border);}
-.ea-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;margin-bottom:4px;}
-.ea-port{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;}
-.ea-status{display:inline-flex;align-items:center;gap:5px;font-family:'DM Mono',monospace;font-size:10px;padding:3px 8px;border-radius:2px;margin-top:8px;}
-.status-live{background:rgba(45,212,160,0.1);color:var(--green);border:1px solid rgba(45,212,160,0.25);}
-.ea-card-body{padding:18px 22px;}
-.ea-main-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;}
-.ea-main-value{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:0.5px;margin-bottom:16px;}
-.ea-main-value.green{color:var(--green);}
-.ea-main-value.red{color:var(--red);}
-.sparkline-wrap{height:50px;margin-bottom:16px;}
-.ea-stats-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px;}
-.ea-stat-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
-.ea-stat-value{font-size:14px;font-weight:600;font-family:'DM Mono',monospace;}
-.ea-stat-value.green{color:var(--green);}
-.ea-stat-value.red{color:var(--red);}
-.ea-stat-value.gold{color:var(--accent2);}
-.ea-card-footer{padding:14px 22px;border-top:1px solid var(--border);}
-.btn-detail{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:10px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;border-radius:2px;}
-.btn-detail:hover{border-color:var(--accent);color:var(--accent);}
-#detail-page{display:none;position:fixed;inset:0;background:var(--bg);z-index:200;overflow-y:auto;}
-.detail-header{border-bottom:1px solid var(--border);padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:rgba(8,10,13,0.95);backdrop-filter:blur(20px);}
-.btn-back{display:flex;align-items:center;gap:8px;background:none;border:1px solid var(--border);color:var(--muted);padding:8px 16px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;cursor:pointer;transition:all 0.2s;border-radius:2px;}
-.btn-back:hover{border-color:var(--text);color:var(--text);}
-.detail-content{max-width:1100px;margin:0 auto;padding:40px 48px;}
-@media(max-width:768px){.detail-header{padding:0 20px;}.detail-content{padding:24px 20px;}}
-.d-hero{padding:0 0 32px;border-bottom:1px solid var(--border);margin-bottom:32px;}
-.d-hero-name{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:2px;margin-bottom:4px;}
-.d-hero-sub{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1.5px;margin-bottom:24px;}
-.d-balance{font-family:'Bebas Neue',sans-serif;font-size:64px;letter-spacing:1px;color:var(--accent2);line-height:1;}
-.d-equity-row{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);margin-top:6px;}
-.d-equity-row span{color:var(--text);}
-.d-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);margin-bottom:24px;}
-@media(max-width:700px){.d-stats-grid{grid-template-columns:repeat(2,1fr);}}
-.d-stat{background:var(--card);padding:18px 20px;}
-.d-stat-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
-.d-stat-value{font-size:20px;font-weight:600;}
-.d-stat-value.green{color:var(--green);}
-.d-stat-value.red{color:var(--red);}
-.d-stat-value.gold{color:var(--accent2);}
-.chart-card{background:var(--card);border:1px solid var(--border);border-radius:2px;margin-bottom:24px;}
-.chart-card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.chart-card-title{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
-.chart-range-btns{display:flex;gap:14px;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);}
-.chart-range-btns span{cursor:pointer;transition:color 0.2s;}
-.chart-body{padding:20px;}
-.chart-wrap{height:260px;position:relative;}
-.pnl-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--border);}
-.pnl-row:last-child{border:none;}
-.pnl-period{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
-.pnl-val{font-family:'DM Mono',monospace;font-size:14px;font-weight:500;}
-.pnl-val.green{color:var(--green);}
-.pnl-val.red{color:var(--red);}
-#loading{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:500;transition:opacity 0.5s;}
-.load-logo{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:4px;}
-.load-logo span{color:var(--accent);}
-.load-bar{width:180px;height:2px;background:var(--border);border-radius:1px;overflow:hidden;margin-top:20px;}
-.load-fill{height:100%;background:var(--accent);animation:loadbar 1.5s ease forwards;}
-@keyframes loadbar{from{width:0}to{width:100%}}
-.load-text{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:2px;margin-top:10px;text-transform:uppercase;}
+:root {
+  --void: #020508;
+  --deep: #060c12;
+  --panel: #080f18;
+  --surface: #0c1520;
+  --border: #0f2030;
+  --border2: #1a3348;
+  --gold: #f0b429;
+  --gold2: #ffd166;
+  --gold-dim: rgba(240,180,41,0.15);
+  --gold-glow: rgba(240,180,41,0.4);
+  --cyan: #00d4ff;
+  --cyan2: #7ef6ff;
+  --cyan-dim: rgba(0,212,255,0.12);
+  --cyan-glow: rgba(0,212,255,0.35);
+  --green: #00ff88;
+  --green-dim: rgba(0,255,136,0.12);
+  --red: #ff3366;
+  --red-dim: rgba(255,51,102,0.12);
+  --purple: #8b5cf6;
+  --text: #c8dce8;
+  --text2: #5a7a8e;
+  --text3: #2a4458;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  font-family: 'Rajdhani', sans-serif;
+  background: var(--void);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: crosshair;
+}
+
+/* ── GRID BACKGROUND ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none; z-index: 0;
+  animation: gridScroll 20s linear infinite;
+}
+@keyframes gridScroll { from{background-position:0 0} to{background-position:40px 40px} }
+
+/* SCAN LINE */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.08) 2px,
+    rgba(0,0,0,0.08) 4px
+  );
+  pointer-events: none; z-index: 1;
+}
+
+/* ── LOADING SCREEN ── */
+#loading {
+  position: fixed; inset: 0;
+  background: var(--void);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  z-index: 9999;
+  transition: opacity 0.8s;
+}
+.load-logo {
+  font-family: 'Orbitron', monospace;
+  font-size: 32px; font-weight: 900;
+  letter-spacing: 6px;
+  color: var(--cyan);
+  text-shadow: 0 0 30px var(--cyan-glow), 0 0 60px var(--cyan-glow);
+  animation: flicker 3s infinite;
+}
+.load-logo span { color: var(--gold); text-shadow: 0 0 30px var(--gold-glow); }
+@keyframes flicker {
+  0%,95%,100%{opacity:1} 96%{opacity:0.7} 97%{opacity:1} 98%{opacity:0.8}
+}
+.load-sub {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; letter-spacing: 4px;
+  color: var(--text2); margin-top: 6px;
+  text-transform: uppercase;
+}
+.load-bar-wrap {
+  width: 240px; height: 1px;
+  background: var(--border2);
+  margin-top: 28px; position: relative; overflow: hidden;
+}
+.load-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--cyan), var(--gold));
+  box-shadow: 0 0 8px var(--cyan-glow);
+  animation: loadbar 2s ease forwards;
+}
+@keyframes loadbar { from{width:0} to{width:100%} }
+.load-status {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px; color: var(--text3);
+  letter-spacing: 2px; margin-top: 12px;
+  text-transform: uppercase;
+  animation: blink 1s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.load-lines {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 20px;
+  font-family: 'Space Mono', monospace;
+  font-size: 8px; color: var(--text3);
+  letter-spacing: 1px; overflow: hidden;
+}
+.load-line { opacity: 0; animation: fadeInLine 0.3s forwards; }
+
+/* ── HEADER ── */
+#app { position: relative; z-index: 2; }
+
+header {
+  position: sticky; top: 0; z-index: 100;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px;
+  background: rgba(2,5,8,0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+header::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cyan), var(--gold), transparent);
+  opacity: 0.4;
+}
+
+.logo {
+  display: flex; align-items: baseline; gap: 10px;
+}
+.logo-main {
+  font-family: 'Orbitron', monospace;
+  font-size: 18px; font-weight: 700;
+  letter-spacing: 3px; color: var(--cyan);
+  text-shadow: 0 0 20px var(--cyan-glow);
+}
+.logo-main span { color: var(--gold); text-shadow: 0 0 20px var(--gold-glow); }
+.logo-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px; letter-spacing: 3px;
+  color: var(--text3); text-transform: uppercase;
+}
+
+.header-right { display: flex; align-items: center; gap: 24px; }
+
+.sys-status {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px; letter-spacing: 2px;
+  color: var(--green); text-transform: uppercase;
+}
+.sys-dot {
+  width: 6px; height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--green);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
+
+.hdr-time {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px; color: var(--text2);
+  letter-spacing: 1px;
+}
+.hdr-corner {
+  width: 10px; height: 10px;
+  border-top: 1px solid var(--cyan);
+  border-right: 1px solid var(--cyan);
+  opacity: 0.5;
+}
+
+/* ── HERO SECTION ── */
+.hero {
+  padding: 48px 40px 40px;
+  border-bottom: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.hero-bg-text {
+  position: absolute; right: -10px; bottom: -30px;
+  font-family: 'Orbitron', monospace;
+  font-size: 180px; font-weight: 900;
+  color: rgba(0,212,255,0.02);
+  letter-spacing: -10px;
+  pointer-events: none; line-height: 1;
+  user-select: none;
+}
+
+.hero-top {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px; letter-spacing: 4px;
+  color: var(--cyan); text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.hero-top::before { content:'//'; opacity:0.5; }
+
+.hero-balance {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(40px, 6vw, 76px);
+  font-weight: 900; line-height: 1;
+  letter-spacing: 2px;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.hero-balance-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px; letter-spacing: 3px;
+  color: var(--text3); text-transform: uppercase;
+  margin-bottom: 32px;
+}
+
+.hero-stats {
+  display: flex; gap: 0;
+  flex-wrap: wrap;
+}
+.hero-stat {
+  padding: 0 32px 0 0;
+  border-right: 1px solid var(--border2);
+  margin-right: 32px;
+}
+.hero-stat:last-child { border: none; }
+.hs-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px; letter-spacing: 2px;
+  color: var(--text3); text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.hs-value {
+  font-family: 'Orbitron', monospace;
+  font-size: 22px; font-weight: 700;
+  letter-spacing: 1px;
+}
+.hs-value.green { color: var(--green); text-shadow: 0 0 12px rgba(0,255,136,0.4); }
+.hs-value.red   { color: var(--red);   text-shadow: 0 0 12px rgba(255,51,102,0.4); }
+.hs-value.gold  { color: var(--gold);  text-shadow: 0 0 12px var(--gold-glow); }
+.hs-value.cyan  { color: var(--cyan);  text-shadow: 0 0 12px var(--cyan-glow); }
+.hs-value.dim   { color: var(--text2); font-size:16px; }
+
+/* ── MAIN ── */
+.main { max-width: 1400px; margin: 0 auto; padding: 36px 40px; }
+
+.section-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 20px;
+}
+.section-title {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px; letter-spacing: 4px;
+  color: var(--text3); text-transform: uppercase;
+}
+.section-line { flex: 1; height: 1px; background: var(--border); }
+.section-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px; color: var(--text3); letter-spacing: 1px;
+}
+
+/* ── EA CARDS GRID ── */
+.ea-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 48px;
+}
+
+.ea-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  position: relative; overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+}
+.ea-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(0,212,255,0.04) 0%, transparent 60%);
+  pointer-events: none;
+  opacity: 0; transition: opacity 0.3s;
+}
+.ea-card:hover { transform: translateY(-4px); }
+.ea-card:hover::before { opacity: 1; }
+
+.ea-card.gold-card:hover { border-color: var(--gold); box-shadow: 0 0 30px rgba(240,180,41,0.15), 0 20px 40px rgba(0,0,0,0.5); }
+.ea-card.cyan-card:hover { border-color: var(--cyan); box-shadow: 0 0 30px var(--cyan-dim), 0 20px 40px rgba(0,0,0,0.5); }
+.ea-card.purple-card:hover { border-color: var(--purple); box-shadow: 0 0 30px rgba(139,92,246,0.15), 0 20px 40px rgba(0,0,0,0.5); }
+
+/* Corner cut indicator */
+.ea-card::after {
+  content: '';
+  position: absolute; top: 0; right: 0;
+  width: 16px; height: 16px;
+  border-left: 1px solid var(--border2);
+  border-bottom: 1px solid var(--border2);
+  pointer-events: none;
+}
+
+.card-accent-bar { height: 2px; width: 100%; }
+.bar-gold   { background: linear-gradient(90deg, var(--gold), transparent); }
+.bar-cyan   { background: linear-gradient(90deg, var(--cyan), transparent); }
+.bar-purple { background: linear-gradient(90deg, var(--purple), transparent); }
+
+.card-head {
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: flex-start; justify-content: space-between;
+}
+.card-name {
+  font-family: 'Orbitron', monospace;
+  font-size: 18px; font-weight: 700;
+  letter-spacing: 2px; margin-bottom: 3px;
+}
+.card-name.gold   { color: var(--gold); }
+.card-name.cyan   { color: var(--cyan); }
+.card-name.purple { color: var(--purple); }
+
+.card-port {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px; color: var(--text3);
+  letter-spacing: 2px;
+}
+.card-live {
+  display: flex; align-items: center; gap: 5px;
+  font-family: 'Space Mono', monospace;
+  font-size: 8px; letter-spacing: 2px;
+  color: var(--green);
+  background: var(--green-dim);
+  border: 1px solid rgba(0,255,136,0.2);
+  padding: 3px 8px;
+}
+.card-live-dot {
+  width: 4px; height: 4px;
+  background: var(--green); border-radius: 50%;
+  box-shadow: 0 0 4px var(--green);
+  animation: pulse 2s infinite;
+}
+
+.card-body { padding: 16px 20px; }
+
+.card-profit-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px; letter-spacing: 2px;
+  color: var(--text3); text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.card-profit-value {
+  font-family: 'Orbitron', monospace;
+  font-size: 28px; font-weight: 700;
+  letter-spacing: 1px; margin-bottom: 12px;
+  line-height: 1;
+}
+.card-profit-value.green { color: var(--green); text-shadow: 0 0 16px rgba(0,255,136,0.35); }
+.card-profit-value.red   { color: var(--red);   text-shadow: 0 0 16px rgba(255,51,102,0.35); }
+
+/* Sparkline */
+.spark-wrap { height: 44px; margin-bottom: 14px; position: relative; }
+.spark-zero-line {
+  position: absolute; left: 0; right: 0;
+  height: 1px; background: var(--border2);
+  top: 50%;
+}
+
+.card-metrics {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.metric {}
+.metric-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 7px; letter-spacing: 2px;
+  color: var(--text3); text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.metric-value {
+  font-family: 'Space Mono', monospace;
+  font-size: 13px; font-weight: 700;
+}
+.metric-value.green { color: var(--green); }
+.metric-value.red   { color: var(--red); }
+.metric-value.gold  { color: var(--gold); }
+.metric-value.cyan  { color: var(--cyan); }
+.metric-value.dim   { color: var(--text2); }
+
+.card-foot {
+  padding: 10px 20px;
+  border-top: 1px solid var(--border);
+}
+.btn-view {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--text2);
+  padding: 8px;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px; letter-spacing: 2px;
+  text-transform: uppercase; cursor: pointer;
+  transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-view:hover { background: var(--surface); color: var(--text); border-color: var(--text2); }
+.btn-view-arr { transition: transform 0.2s; }
+.btn-view:hover .btn-view-arr { transform: translateX(4px); }
+
+/* ── DETAIL PAGE ── */
+#detail-page {
+  display: none;
+  position: fixed; inset: 0;
+  background: var(--void);
+  z-index: 200; overflow-y: auto;
+}
+
+.d-header {
+  position: sticky; top: 0; z-index: 10;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px;
+  background: rgba(2,5,8,0.97);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.btn-back {
+  display: flex; align-items: center; gap: 8px;
+  background: none; border: 1px solid var(--border2);
+  color: var(--text2);
+  padding: 7px 16px;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px; letter-spacing: 2px;
+  text-transform: uppercase; cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-back:hover { border-color: var(--cyan); color: var(--cyan); }
+
+.d-header-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 11px; letter-spacing: 3px;
+  color: var(--text2);
+}
+
+.d-content { max-width: 1100px; margin: 0 auto; padding: 40px; }
+
+.d-hero {
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 40px; align-items: start;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 28px;
+}
+.d-hero-left {}
+.d-ea-name {
+  font-family: 'Orbitron', monospace;
+  font-size: 42px; font-weight: 900;
+  letter-spacing: 4px; line-height: 1;
+  margin-bottom: 6px;
+}
+.d-ea-name.gold   { color: var(--gold); text-shadow: 0 0 40px var(--gold-glow); }
+.d-ea-name.cyan   { color: var(--cyan); text-shadow: 0 0 40px var(--cyan-glow); }
+.d-ea-name.purple { color: var(--purple); text-shadow: 0 0 40px rgba(139,92,246,0.4); }
+.d-ea-sub {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px; letter-spacing: 3px;
+  color: var(--text3); text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.d-balance {
+  font-family: 'Orbitron', monospace;
+  font-size: 52px; font-weight: 900;
+  color: var(--text); line-height: 1;
+  letter-spacing: 1px;
+}
+.d-balance-sub {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px; color: var(--text3);
+  letter-spacing: 2px; margin-top: 6px;
+}
+.d-balance-sub span { color: var(--text2); }
+
+.d-hero-right {
+  text-align: right;
+}
+.d-profit-big {
+  font-family: 'Orbitron', monospace;
+  font-size: 36px; font-weight: 700;
+  line-height: 1; letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.d-profit-big.green { color: var(--green); text-shadow: 0 0 20px rgba(0,255,136,0.4); }
+.d-profit-big.red   { color: var(--red);   text-shadow: 0 0 20px rgba(255,51,102,0.4); }
+.d-profit-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px; letter-spacing: 2px;
+  color: var(--text3); text-transform: uppercase;
+}
+
+/* Stats grid */
+.d-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px; background: var(--border);
+  margin-bottom: 24px;
+}
+.d-stat {
+  background: var(--panel);
+  padding: 16px 18px;
+  position: relative; overflow: hidden;
+}
+.d-stat::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 1px;
+}
+.d-stat.accent-green::before { background: var(--green); box-shadow: 0 0 8px var(--green); }
+.d-stat.accent-red::before   { background: var(--red);   box-shadow: 0 0 8px var(--red); }
+.d-stat.accent-gold::before  { background: var(--gold);  box-shadow: 0 0 8px var(--gold); }
+.d-stat.accent-cyan::before  { background: var(--cyan);  box-shadow: 0 0 8px var(--cyan); }
+
+.ds-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 7px; letter-spacing: 2px;
+  color: var(--text3); text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.ds-value {
+  font-family: 'Orbitron', monospace;
+  font-size: 18px; font-weight: 700;
+  line-height: 1;
+}
+.ds-value.green { color: var(--green); }
+.ds-value.red   { color: var(--red); }
+.ds-value.gold  { color: var(--gold); }
+.ds-value.cyan  { color: var(--cyan); }
+.ds-value.dim   { color: var(--text2); }
+
+/* Chart panel */
+.d-panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  margin-bottom: 20px;
+  position: relative;
+}
+.d-panel-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.d-panel-title {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px; letter-spacing: 3px;
+  color: var(--text3); text-transform: uppercase;
+  display: flex; align-items: center; gap: 8px;
+}
+.d-panel-title::before { content:'//'; color: var(--border2); }
+
+.range-btns {
+  display: flex; gap: 4px;
+}
+.range-btn {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px; letter-spacing: 1px;
+  padding: 4px 10px;
+  border: 1px solid var(--border2);
+  background: transparent; color: var(--text3);
+  cursor: pointer; transition: all 0.15s;
+  text-transform: uppercase;
+}
+.range-btn:hover { border-color: var(--text2); color: var(--text2); }
+.range-btn.active { border-color: var(--cyan); color: var(--cyan); background: var(--cyan-dim); }
+
+.d-panel-body { padding: 20px; }
+.chart-wrap { height: 280px; position: relative; }
+
+/* PNL rows */
+.pnl-table {}
+.pnl-tr {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.pnl-tr:last-child { border: none; }
+.pnl-tr::before {
+  content: '';
+  position: absolute; left: -20px; top: 0; bottom: 0;
+  width: 2px; background: var(--border);
+  transition: background 0.2s;
+}
+.pnl-td-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px; letter-spacing: 2px;
+  color: var(--text3); text-transform: uppercase;
+  display: flex; align-items: center; gap: 8px;
+}
+.pnl-td-label::before { content: '►'; font-size: 6px; color: var(--border2); }
+.pnl-td-value {
+  font-family: 'Space Mono', monospace;
+  font-size: 14px; font-weight: 700;
+}
+.pnl-td-value.green { color: var(--green); }
+.pnl-td-value.red   { color: var(--red); }
+.pnl-td-value.dim   { color: var(--text2); }
+
+/* Footer */
+.page-footer {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px; color: var(--text3);
+  letter-spacing: 1px; text-align: center;
+  padding: 20px 0 0; line-height: 2.2;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width: 900px) {
+  .ea-grid { grid-template-columns: 1fr; }
+  header, .hero, .main { padding-left: 20px; padding-right: 20px; }
+  .d-header { padding: 0 20px; }
+  .d-content { padding: 24px 20px; }
+  .d-hero { grid-template-columns: 1fr; }
+  .d-hero-right { text-align: left; }
+  .d-stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .d-balance { font-size: 36px; }
+}
+
+/* ── CORNER DECORATIONS ── */
+.corner-tl, .corner-tr, .corner-bl, .corner-br {
+  position: absolute; width: 10px; height: 10px;
+  pointer-events: none;
+}
+.corner-tl { top: 0; left: 0; border-top: 1px solid var(--cyan); border-left: 1px solid var(--cyan); opacity: 0.5; }
+.corner-tr { top: 0; right: 0; border-top: 1px solid var(--cyan); border-right: 1px solid var(--cyan); opacity: 0.5; }
+.corner-bl { bottom: 0; left: 0; border-bottom: 1px solid var(--cyan); border-left: 1px solid var(--cyan); opacity: 0.5; }
+.corner-br { bottom: 0; right: 0; border-bottom: 1px solid var(--cyan); border-right: 1px solid var(--cyan); opacity: 0.5; }
 </style>
 </head>
 <body>
 
+<!-- ── LOADING ── -->
 <div id="loading">
-  <div class="load-logo">Entry<span>Plan</span></div>
-  <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:3px;margin-top:2px;">ACADEMY</div>
-  <div class="load-bar"><div class="load-fill"></div></div>
-  <div class="load-text">Fetching live data...</div>
+  <div style="position:relative">
+    <div class="load-logo">ENTRY<span>PLAN</span></div>
+    <div class="load-sub">ACADEMY // TRADING SYSTEMS</div>
+    <div class="load-bar-wrap" style="margin-top:24px"><div class="load-bar-fill"></div></div>
+    <div class="load-status">INITIALIZING DATA STREAMS</div>
+  </div>
+  <div class="load-lines" style="position:fixed;bottom:0;left:0;right:0;height:80px">
+    <div class="load-line" style="animation-delay:0.2s">// CONNECTING TO SUPABASE ENDPOINT...</div>
+    <div class="load-line" style="animation-delay:0.6s">// FETCHING PORTFOLIO METRICS...</div>
+    <div class="load-line" style="animation-delay:1.0s">// RENDERING PROFIT CURVES...</div>
+    <div class="load-line" style="animation-delay:1.4s">// SYSTEMS ONLINE ✓</div>
+  </div>
 </div>
 
-<div id="home-page">
-  <header>
-    <div>
-      <div class="logo-text">Entry<span>Plan</span></div>
-      <div class="logo-sub">Academy</div>
-    </div>
-    <div class="live-badge"><div class="live-dot"></div>Live Performance</div>
-  </header>
+<!-- ── APP ── -->
+<div id="app">
 
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-main">ENTRY<span>PLAN</span></div>
+    <div class="logo-tag">// ACADEMY</div>
+  </div>
+  <div class="header-right">
+    <div class="sys-status"><div class="sys-dot"></div>ALL SYSTEMS ONLINE</div>
+    <div class="hdr-time" id="live-clock">--:--:--</div>
+    <div class="hdr-corner"></div>
+  </div>
+</header>
+
+<!-- HOME PAGE -->
+<div id="home-page">
+
+  <!-- HERO -->
   <section class="hero">
-    <div class="hero-label">Combined Portfolio Summary</div>
-    <div class="hero-total" id="hero-total">$0.00</div>
-    <div class="hero-row">
+    <div class="hero-bg-text">EPA</div>
+    <div class="hero-top">COMBINED PORTFOLIO BALANCE</div>
+    <div class="hero-balance" id="hero-total">$0.00</div>
+    <div class="hero-balance-label">TOTAL ASSETS UNDER MANAGEMENT · 3 ACTIVE PORTFOLIOS</div>
+    <div class="hero-stats">
       <div class="hero-stat">
-        <div class="hero-stat-label">Total Profit</div>
-        <div class="hero-stat-value green" id="h-total-pnl">+$0.00</div>
+        <div class="hs-label">Total Profit</div>
+        <div class="hs-value green" id="h-total-pnl">+$0.00</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-label">Monthly Profit</div>
-        <div class="hero-stat-value green" id="h-monthly-pnl">+$0.00</div>
+        <div class="hs-label">Monthly Profit</div>
+        <div class="hs-value green" id="h-monthly-pnl">+$0.00</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-label">Active EAs</div>
-        <div class="hero-stat-value gold">3</div>
+        <div class="hs-label">Active EAs</div>
+        <div class="hs-value gold">03</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-label">Last Update</div>
-        <div class="hero-stat-value muted" id="h-update">—</div>
+        <div class="hs-label">Last Sync</div>
+        <div class="hs-value dim" id="h-update">—</div>
       </div>
     </div>
   </section>
 
+  <!-- CARDS -->
   <div class="main">
-    <div class="section-label">Portfolio Overview</div>
+    <div class="section-header">
+      <div class="section-title">// Portfolio Nodes</div>
+      <div class="section-line"></div>
+      <div class="section-num">[ 3 / 3 ONLINE ]</div>
+    </div>
+
     <div class="ea-grid">
 
-      <div class="ea-card" onclick="openDetail('gradea')">
-        <div class="ea-card-top-bar bar-gold"></div>
-        <div class="ea-card-header">
-          <div class="ea-name">Grade A</div>
-          <div class="ea-port">PORT #501412</div>
-          <div class="ea-status status-live"><span>●</span> LIVE</div>
+      <!-- GRADE A -->
+      <div class="ea-card gold-card" onclick="openDetail('gradea')">
+        <div class="corner-tl"></div>
+        <div class="card-accent-bar bar-gold"></div>
+        <div class="card-head">
+          <div>
+            <div class="card-name gold">GRADE A</div>
+            <div class="card-port">PORT #501412 // XAUUSD</div>
+          </div>
+          <div class="card-live"><div class="card-live-dot"></div>LIVE</div>
         </div>
-        <div class="ea-card-body">
-          <div class="ea-main-label">Total Profit</div>
-          <div class="ea-main-value green" id="ga-total-pnl">—</div>
-          <div class="sparkline-wrap"><canvas id="spark-gradea"></canvas></div>
-          <div class="ea-stats-row">
-            <div><div class="ea-stat-label">Monthly Profit</div><div class="ea-stat-value green" id="ga-month-pnl">—</div></div>
-            <div><div class="ea-stat-label">Win Rate</div><div class="ea-stat-value gold" id="ga-winrate">—</div></div>
-            <div><div class="ea-stat-label">Balance</div><div class="ea-stat-value" id="ga-balance">—</div></div>
-            <div><div class="ea-stat-label">Growth</div><div class="ea-stat-value gold" id="ga-growth">—</div></div>
+        <div class="card-body">
+          <div class="card-profit-label">// TOTAL PROFIT</div>
+          <div class="card-profit-value green" id="ga-total-pnl">—</div>
+          <div class="spark-wrap">
+            <div class="spark-zero-line"></div>
+            <canvas id="spark-gradea"></canvas>
+          </div>
+          <div class="card-metrics">
+            <div class="metric">
+              <div class="metric-label">Monthly Profit</div>
+              <div class="metric-value green" id="ga-month-pnl">—</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Win Rate</div>
+              <div class="metric-value gold" id="ga-winrate">—</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Balance</div>
+              <div class="metric-value dim" id="ga-balance">—</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Growth</div>
+              <div class="metric-value gold" id="ga-growth">—</div>
+            </div>
           </div>
         </div>
-        <div class="ea-card-footer"><button class="btn-detail">View Details →</button></div>
+        <div class="card-foot">
+          <button class="btn-view">ACCESS NODE <span class="btn-view-arr">→</span></button>
+        </div>
       </div>
 
-      <div class="ea-card" onclick="openDetail('blackhole')">
-        <div class="ea-card-top-bar bar-green"></div>
-        <div class="ea-card-header">
-          <div class="ea-name">BlackHole</div>
-          <div class="ea-port">PORT #501425</div>
-          <div class="ea-status status-live"><span>●</span> LIVE</div>
+      <!-- BLACKHOLE -->
+      <div class="ea-card cyan-card" onclick="openDetail('blackhole')">
+        <div class="corner-tl"></div>
+        <div class="card-accent-bar bar-cyan"></div>
+        <div class="card-head">
+          <div>
+            <div class="card-name cyan">BLACKHOLE</div>
+            <div class="card-port">PORT #501425 // XAUUSD</div>
+          </div>
+          <div class="card-live"><div class="card-live-dot"></div>LIVE</div>
         </div>
-        <div class="ea-card-body">
-          <div class="ea-main-label">Total Profit</div>
-          <div class="ea-main-value green" id="bh-total-pnl">—</div>
-          <div class="sparkline-wrap"><canvas id="spark-blackhole"></canvas></div>
-          <div class="ea-stats-row">
-            <div><div class="ea-stat-label">Monthly Profit</div><div class="ea-stat-value green" id="bh-month-pnl">—</div></div>
-            <div><div class="ea-stat-label">Win Rate</div><div class="ea-stat-value gold" id="bh-winrate">—</div></div>
-            <div><div class="ea-stat-label">Balance</div><div class="ea-stat-value" id="bh-balance">—</div></div>
-            <div><div class="ea-stat-label">Growth</div><div class="ea-stat-value gold" id="bh-growth">—</div></div>
+        <div class="card-body">
+          <div class="card-profit-label">// TOTAL PROFIT</div>
+          <div class="card-profit-value green" id="bh-total-pnl">—</div>
+          <div class="spark-wrap">
+            <div class="spark-zero-line"></div>
+            <canvas id="spark-blackhole"></canvas>
+          </div>
+          <div class="card-metrics">
+            <div class="metric">
+              <div class="metric-label">Monthly Profit</div>
+              <div class="metric-value green" id="bh-month-pnl">—</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Win Rate</div>
+              <div class="metric-value gold" id="bh-winrate">—</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Balance</div>
+              <div class="metric-value dim" id="bh-balance">—</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Growth</div>
+              <div class="metric-value gold" id="bh-growth">—</div>
+            </div>
           </div>
         </div>
-        <div class="ea-card-footer"><button class="btn-detail">View Details →</button></div>
+        <div class="card-foot">
+          <button class="btn-view">ACCESS NODE <span class="btn-view-arr">→</span></button>
+        </div>
       </div>
 
-      <div class="ea-card" onclick="openDetail('bigbang')">
-        <div class="ea-card-top-bar bar-blue"></div>
-        <div class="ea-card-header">
-          <div class="ea-name">BigBang</div>
-          <div class="ea-port">PORT #501427</div>
-          <div class="ea-status status-live"><span>●</span> LIVE</div>
+      <!-- BIGBANG -->
+      <div class="ea-card purple-card" onclick="openDetail('bigbang')">
+        <div class="corner-tl"></div>
+        <div class="card-accent-bar bar-purple"></div>
+        <div class="card-head">
+          <div>
+            <div class="card-name purple">BIGBANG</div>
+            <div class="card-port">PORT #501427 // XAUUSD</div>
+          </div>
+          <div class="card-live"><div class="card-live-dot"></div>LIVE</div>
         </div>
-        <div class="ea-card-body">
-          <div class="ea-main-label">Total Profit</div>
-          <div class="ea-main-value green" id="bb-total-pnl">—</div>
-          <div class="sparkline-wrap"><canvas id="spark-bigbang"></canvas></div>
-          <div class="ea-stats-row">
-            <div><div class="ea-stat-label">Monthly Profit</div><div class="ea-stat-value green" id="bb-month-pnl">—</div></div>
-            <div><div class="ea-stat-label">Win Rate</div><div class="ea-stat-value gold" id="bb-winrate">—</div></div>
-            <div><div class="ea-stat-label">Balance</div><div class="ea-stat-value" id="bb-balance">—</div></div>
-            <div><div class="ea-stat-label">Growth</div><div class="ea-stat-value gold" id="bb-growth">—</div></div>
+        <div class="card-body">
+          <div class="card-profit-label">// TOTAL PROFIT</div>
+          <div class="card-profit-value green" id="bb-total-pnl">—</div>
+          <div class="spark-wrap">
+            <div class="spark-zero-line"></div>
+            <canvas id="spark-bigbang"></canvas>
+          </div>
+          <div class="card-metrics">
+            <div class="metric">
+              <div class="metric-label">Monthly Profit</div>
+              <div class="metric-value green" id="bb-month-pnl">—</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Win Rate</div>
+              <div class="metric-value gold" id="bb-winrate">—</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Balance</div>
+              <div class="metric-value dim" id="bb-balance">—</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Growth</div>
+              <div class="metric-value gold" id="bb-growth">—</div>
+            </div>
           </div>
         </div>
-        <div class="ea-card-footer"><button class="btn-detail">View Details →</button></div>
+        <div class="card-foot">
+          <button class="btn-view">ACCESS NODE <span class="btn-view-arr">→</span></button>
+        </div>
       </div>
 
-    </div>
-    <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);text-align:center;padding:20px 0 0;letter-spacing:0.5px;line-height:2;">
-      Past performance is not indicative of future results. Trading involves substantial risk.<br>© 2025 EntryPlan Academy
+    </div><!-- ea-grid -->
+
+    <div class="page-footer">
+      PAST PERFORMANCE IS NOT INDICATIVE OF FUTURE RESULTS // TRADING INVOLVES SUBSTANTIAL RISK<br>
+      © 2025 ENTRYPLAN ACADEMY // ALL RIGHTS RESERVED
     </div>
   </div>
-</div>
+</div><!-- home-page -->
 
-<!-- DETAIL PAGE -->
+<!-- ── DETAIL PAGE ── -->
 <div id="detail-page">
-  <div class="detail-header">
-    <button class="btn-back" onclick="closeDetail()">← Back</button>
-    <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1.5px;" id="d-port-label">—</div>
+  <div class="d-header">
+    <button class="btn-back" onclick="closeDetail()">◄ BACK</button>
+    <div class="d-header-title" id="d-header-label">—</div>
+    <div style="font-family:'Space Mono',monospace;font-size:8px;color:var(--text3);letter-spacing:2px" id="d-port-label">—</div>
   </div>
-  <div class="detail-content">
+
+  <div class="d-content">
+
+    <!-- D HERO -->
     <div class="d-hero">
-      <div class="d-hero-name" id="d-name">—</div>
-      <div class="d-hero-sub" id="d-sub">—</div>
-      <div class="d-balance" id="d-balance">$0.00</div>
-      <div class="d-equity-row">Equity: <span id="d-equity">—</span> &nbsp;·&nbsp; Floating P&L: <span id="d-floating">—</span></div>
-    </div>
-
-    <div class="d-stats-grid">
-      <div class="d-stat"><div class="d-stat-label">Total Profit</div><div class="d-stat-value green" id="d-total-pnl">—</div></div>
-      <div class="d-stat"><div class="d-stat-label">Monthly Profit</div><div class="d-stat-value green" id="d-month-pnl">—</div></div>
-      <div class="d-stat"><div class="d-stat-label">Daily Profit</div><div class="d-stat-value" id="d-daily-pnl">—</div></div>
-      <div class="d-stat"><div class="d-stat-label">Growth</div><div class="d-stat-value gold" id="d-growth">—</div></div>
-      <div class="d-stat"><div class="d-stat-label">Win Rate</div><div class="d-stat-value" id="d-winrate">—</div></div>
-      <div class="d-stat"><div class="d-stat-label">Profit Factor</div><div class="d-stat-value" id="d-pf">—</div></div>
-      <div class="d-stat"><div class="d-stat-label">Max Drawdown</div><div class="d-stat-value red" id="d-dd">—</div></div>
-      <div class="d-stat"><div class="d-stat-label">Open Orders</div><div class="d-stat-value gold" id="d-open">—</div></div>
-    </div>
-
-    <div class="chart-card">
-      <div class="chart-card-header">
-        <div class="chart-card-title">Profit Curve</div>
-        <div class="chart-range-btns">
-          <span onclick="setRange('all')" id="r-all" style="color:var(--accent)">ALL</span>
-          <span onclick="setRange('3m')" id="r-3m">3M</span>
-          <span onclick="setRange('1m')" id="r-1m">1M</span>
-          <span onclick="setRange('1w')" id="r-1w">1W</span>
+      <div class="d-hero-left">
+        <div class="d-ea-name gold" id="d-name">—</div>
+        <div class="d-ea-sub" id="d-sub">—</div>
+        <div class="d-balance" id="d-balance">$0.00</div>
+        <div class="d-balance-sub">
+          EQUITY: <span id="d-equity">—</span> &nbsp;//&nbsp; FLOATING P&amp;L: <span id="d-floating">—</span>
         </div>
       </div>
-      <div class="chart-body"><div class="chart-wrap"><canvas id="detailChart"></canvas></div></div>
-    </div>
-
-    <div class="chart-card">
-      <div class="chart-card-header"><div class="chart-card-title">P&amp;L Summary</div></div>
-      <div class="chart-body">
-        <div class="pnl-row"><div class="pnl-period">Daily Profit</div><div class="pnl-val" id="dp-daily">—</div></div>
-        <div class="pnl-row"><div class="pnl-period">Monthly Profit</div><div class="pnl-val" id="dp-month">—</div></div>
-        <div class="pnl-row"><div class="pnl-period">Total Profit</div><div class="pnl-val" id="dp-total">—</div></div>
-        <div class="pnl-row"><div class="pnl-period">Total Trades</div><div class="pnl-val" id="dp-trades">—</div></div>
-        <div class="pnl-row"><div class="pnl-period">Win / Lose</div><div class="pnl-val" id="dp-winlose">—</div></div>
+      <div class="d-hero-right">
+        <div class="d-profit-label">// TOTAL PROFIT</div>
+        <div class="d-profit-big green" id="d-profit-big">—</div>
       </div>
     </div>
+
+    <!-- STATS GRID -->
+    <div class="d-stats-grid" style="margin-bottom:24px">
+      <div class="d-stat accent-green">
+        <div class="ds-label">Total Profit</div>
+        <div class="ds-value green" id="d-total-pnl">—</div>
+      </div>
+      <div class="d-stat accent-green">
+        <div class="ds-label">Monthly Profit</div>
+        <div class="ds-value green" id="d-month-pnl">—</div>
+      </div>
+      <div class="d-stat accent-cyan">
+        <div class="ds-label">Daily Profit</div>
+        <div class="ds-value cyan" id="d-daily-pnl">—</div>
+      </div>
+      <div class="d-stat accent-gold">
+        <div class="ds-label">Growth</div>
+        <div class="ds-value gold" id="d-growth">—</div>
+      </div>
+      <div class="d-stat accent-gold">
+        <div class="ds-label">Win Rate</div>
+        <div class="ds-value gold" id="d-winrate">—</div>
+      </div>
+      <div class="d-stat accent-cyan">
+        <div class="ds-label">Profit Factor</div>
+        <div class="ds-value cyan" id="d-pf">—</div>
+      </div>
+      <div class="d-stat accent-red">
+        <div class="ds-label">Max Drawdown</div>
+        <div class="ds-value red" id="d-dd">—</div>
+      </div>
+      <div class="d-stat accent-gold">
+        <div class="ds-label">Open Orders</div>
+        <div class="ds-value gold" id="d-open">—</div>
+      </div>
+    </div>
+
+    <!-- PROFIT CURVE -->
+    <div class="d-panel">
+      <div class="d-panel-header">
+        <div class="d-panel-title">PROFIT CURVE</div>
+        <div class="range-btns">
+          <button class="range-btn active" id="r-all" onclick="setRange('all')">ALL</button>
+          <button class="range-btn" id="r-3m" onclick="setRange('3m')">3M</button>
+          <button class="range-btn" id="r-1m" onclick="setRange('1m')">1M</button>
+          <button class="range-btn" id="r-1w" onclick="setRange('1w')">1W</button>
+        </div>
+      </div>
+      <div class="d-panel-body">
+        <div class="chart-wrap"><canvas id="detailChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- PNL SUMMARY -->
+    <div class="d-panel">
+      <div class="d-panel-header">
+        <div class="d-panel-title">P&amp;L BREAKDOWN</div>
+      </div>
+      <div class="d-panel-body">
+        <div class="pnl-table">
+          <div class="pnl-tr">
+            <div class="pnl-td-label">Daily Profit</div>
+            <div class="pnl-td-value green" id="dp-daily">—</div>
+          </div>
+          <div class="pnl-tr">
+            <div class="pnl-td-label">Monthly Profit</div>
+            <div class="pnl-td-value green" id="dp-month">—</div>
+          </div>
+          <div class="pnl-tr">
+            <div class="pnl-td-label">Total Profit (All Time)</div>
+            <div class="pnl-td-value green" id="dp-total">—</div>
+          </div>
+          <div class="pnl-tr">
+            <div class="pnl-td-label">Total Trades</div>
+            <div class="pnl-td-value dim" id="dp-trades">—</div>
+          </div>
+          <div class="pnl-tr">
+            <div class="pnl-td-label">Win / Lose Split</div>
+            <div class="pnl-td-value dim" id="dp-winlose">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
-</div>
+</div><!-- detail-page -->
+
+</div><!-- app -->
 
 <script>
-const SUPA_URL='https://stdvqepkkkeehojstfww.supabase.co';
-const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0ZHZxZXBra2tlZWhvanN0Znd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyNTE5MjMsImV4cCI6MjA4NzgyNzkyM30.g25XS-O44n-Nf01-pRKy3pBH4OpYwQ7nbia67vHtx04';
+// ── CONFIG ──
+const SUPA_URL = 'https://stdvqepkkkeehojstfww.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0ZHZxZXBra2tlZWhvanN0Znd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyNTE5MjMsImV4cCI6MjA4NzgyNzkyM30.g25XS-O44n-Nf01-pRKy3pBH4OpYwQ7nbia67vHtx04';
 
-const EA_CONFIG={
-  gradea:   {name:'Grade A',  port:'501412',prefix:'ga',color:'#c8a85a'},
-  blackhole:{name:'BlackHole',port:'501425',prefix:'bh',color:'#2dd4a0'},
-  bigbang:  {name:'BigBang',  port:'501427',prefix:'bb',color:'#60a5fa'},
+const EA_CONFIG = {
+  gradea:   { name:'GRADE A',   port:'501412', prefix:'ga', color:'#f0b429', nameClass:'gold'   },
+  blackhole:{ name:'BLACKHOLE', port:'501425', prefix:'bh', color:'#00d4ff', nameClass:'cyan'   },
+  bigbang:  { name:'BIGBANG',   port:'501427', prefix:'bb', color:'#8b5cf6', nameClass:'purple' },
 };
 
-let allData={},allEquity={},detailChart=null,currentEA=null,currentRange='all',sparkCharts={};
+let allData={}, allEquity={}, detailChart=null, currentEA=null, currentRange='all', sparkCharts={};
 
-async function fetchSupa(table,query=''){
+// ── CLOCK ──
+function updateClock(){
+  const now = new Date();
+  document.getElementById('live-clock').textContent =
+    now.toLocaleTimeString('en-GB',{hour12:false}) + ' UTC+7';
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ── FETCH ──
+async function fetchSupa(table, query=''){
   try{
-    const r=await fetch(`${SUPA_URL}/rest/v1/${table}?${query}`,{headers:{'apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`}});
-    return r.ok?r.json():[];
-  }catch(e){return[];}
+    const r = await fetch(`${SUPA_URL}/rest/v1/${table}?${query}`,{
+      headers:{'apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`}
+    });
+    return r.ok ? r.json() : [];
+  }catch(e){ return []; }
 }
 
-function fUSD(v){if(v===null||v===undefined)return'—';const s=v>=0?'+':'-';return`${s}$${Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;}
-function fBal(v){return'$'+parseFloat(v||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function fPct(v){const s=v>=0?'+':'';return`${s}${parseFloat(v||0).toFixed(2)}%`;}
-function cls(v){return parseFloat(v||0)>=0?'green':'red';}
-
-// Sparkline uses PROFIT column
-function buildSparkline(id,eq,color){
-  if(sparkCharts[id])sparkCharts[id].destroy();
-  const ctx=document.getElementById(id);
-  if(!ctx||!eq||eq.length<2)return;
-  const vals=eq.map(d=>parseFloat(d.profit||0));
-  const g=ctx.getContext('2d').createLinearGradient(0,0,0,50);
-  g.addColorStop(0,color+'44');g.addColorStop(1,color+'00');
-  sparkCharts[id]=new Chart(ctx,{type:'line',data:{labels:vals.map((_,i)=>i),datasets:[{data:vals,borderColor:color,backgroundColor:g,borderWidth:1.5,pointRadius:0,fill:true,tension:0.4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});
+// ── FORMAT ──
+function fUSD(v){
+  if(v===null||v===undefined)return'—';
+  const s=v>=0?'+':'-';
+  return`${s}$${Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
 }
+function fBal(v){ return '$'+parseFloat(v||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function fPct(v){ return (v>=0?'+':'')+parseFloat(v||0).toFixed(2)+'%'; }
+function cls(v){ return parseFloat(v||0)>=0?'green':'red'; }
 
-function renderCard(key,stats,eq){
-  const cfg=EA_CONFIG[key];const p=cfg.prefix;
-  const d=stats&&stats.length>0?stats[0]:null;
-  if(!d)return;
-  const tEl=document.getElementById(`${p}-total-pnl`);
-  tEl.textContent=fUSD(d.total_pnl||0);tEl.className=`ea-main-value ${cls(d.total_pnl||0)}`;
-  const mEl=document.getElementById(`${p}-month-pnl`);
-  mEl.textContent=fUSD(d.monthly_pnl||0);mEl.className=`ea-stat-value ${cls(d.monthly_pnl||0)}`;
-  document.getElementById(`${p}-winrate`).textContent=(d.win_rate||0).toFixed(1)+'%';
-  document.getElementById(`${p}-balance`).textContent=fBal(d.balance);
-  const gEl=document.getElementById(`${p}-growth`);
-  gEl.textContent=fPct(d.growth_percent||0);gEl.className=`ea-stat-value ${(d.growth_percent||0)>=0?'gold':'red'}`;
-  buildSparkline(`spark-${key}`,eq,cfg.color);
-}
-
-function renderHero(){
-  let tb=0,tp=0,tm=0,lt=null;
-  Object.keys(allData).forEach(k=>{
-    const d=allData[k]&&allData[k].length>0?allData[k][0]:null;if(!d)return;
-    tb+=parseFloat(d.balance||0);tp+=parseFloat(d.total_pnl||0);tm+=parseFloat(d.monthly_pnl||0);
-    if(!lt||new Date(d.recorded_at)>new Date(lt))lt=d.recorded_at;
+// ── SPARKLINE ──
+function buildSparkline(id, eq, color){
+  if(sparkCharts[id]) sparkCharts[id].destroy();
+  const ctx = document.getElementById(id);
+  if(!ctx||!eq||eq.length<2) return;
+  const vals = eq.map(d=>parseFloat(d.profit||0));
+  const g = ctx.getContext('2d').createLinearGradient(0,0,0,44);
+  g.addColorStop(0, color+'50'); g.addColorStop(1, color+'00');
+  sparkCharts[id] = new Chart(ctx,{
+    type:'line',
+    data:{ labels:vals.map((_,i)=>i), datasets:[{
+      data:vals, borderColor:color, backgroundColor:g,
+      borderWidth:1.5, pointRadius:0, fill:true, tension:0.4
+    }]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{enabled:false}},
+      scales:{x:{display:false},y:{display:false}},
+      animation:{duration:1000}
+    }
   });
-  document.getElementById('hero-total').textContent=fBal(tb);
-  const tEl=document.getElementById('h-total-pnl');tEl.textContent=fUSD(tp);tEl.className='hero-stat-value '+(tp>=0?'green':'red');
-  const mEl=document.getElementById('h-monthly-pnl');mEl.textContent=fUSD(tm);mEl.className='hero-stat-value '+(tm>=0?'green':'red');
-  if(lt){const dt=new Date(lt);document.getElementById('h-update').textContent=dt.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+' '+dt.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}
 }
 
-function openDetail(key){
-  currentEA=key;currentRange='all';
-  const cfg=EA_CONFIG[key];const d=allData[key]&&allData[key].length>0?allData[key][0]:null;const eq=allEquity[key]||[];
-  document.getElementById('d-port-label').textContent='PORT #'+cfg.port;
-  document.getElementById('d-name').textContent=cfg.name;
-  document.getElementById('d-sub').textContent='PORT #'+cfg.port+' · XAUUSD';
-  if(d){
-    document.getElementById('d-balance').textContent=fBal(d.balance);
-    document.getElementById('d-equity').textContent=fBal(d.equity);
-    const fEl=document.getElementById('d-floating');fEl.textContent=fUSD(d.floating_pnl||0);fEl.style.color=(d.floating_pnl||0)>=0?'var(--green)':'var(--red)';
-    const tEl=document.getElementById('d-total-pnl');tEl.textContent=fUSD(d.total_pnl||0);tEl.className='d-stat-value '+(d.total_pnl>=0?'green':'red');
-    const mEl=document.getElementById('d-month-pnl');mEl.textContent=fUSD(d.monthly_pnl||0);mEl.className='d-stat-value '+(d.monthly_pnl>=0?'green':'red');
-    const dEl=document.getElementById('d-daily-pnl');dEl.textContent=fUSD(d.daily_pnl||0);dEl.className='d-stat-value '+(d.daily_pnl>=0?'green':'red');
-    document.getElementById('d-growth').textContent=fPct(d.growth_percent||0);
-    document.getElementById('d-winrate').textContent=(d.win_rate||0).toFixed(1)+'%';
-    document.getElementById('d-pf').textContent=(d.profit_factor||0).toFixed(2);
-    document.getElementById('d-dd').textContent=(d.drawdown_percent||0).toFixed(2)+'%';
-    document.getElementById('d-open').textContent=d.open_orders||0;
-    const dp=document.getElementById('dp-daily');dp.textContent=fUSD(d.daily_pnl||0);dp.className='pnl-val '+(d.daily_pnl>=0?'green':'red');
-    const mp=document.getElementById('dp-month');mp.textContent=fUSD(d.monthly_pnl||0);mp.className='pnl-val '+(d.monthly_pnl>=0?'green':'red');
-    const tp=document.getElementById('dp-total');tp.textContent=fUSD(d.total_pnl||0);tp.className='pnl-val '+(d.total_pnl>=0?'green':'red');
-    document.getElementById('dp-trades').textContent=d.total_trades||0;
-    document.getElementById('dp-winlose').textContent=`${d.winning_trades||0} / ${d.losing_trades||0}`;
+// ── RENDER CARD ──
+function renderCard(key, stats, eq){
+  const p = EA_CONFIG[key].prefix;
+  const d = stats&&stats.length>0 ? stats[0] : null;
+  if(!d) return;
+
+  const tEl = document.getElementById(`${p}-total-pnl`);
+  tEl.textContent = fUSD(d.total_pnl||0);
+  tEl.className = `card-profit-value ${cls(d.total_pnl||0)}`;
+
+  const mEl = document.getElementById(`${p}-month-pnl`);
+  mEl.textContent = fUSD(d.monthly_pnl||0);
+  mEl.className = `metric-value ${cls(d.monthly_pnl||0)}`;
+
+  document.getElementById(`${p}-winrate`).textContent = (d.win_rate||0).toFixed(1)+'%';
+  document.getElementById(`${p}-balance`).textContent = fBal(d.balance);
+
+  const gEl = document.getElementById(`${p}-growth`);
+  gEl.textContent = fPct(d.growth_percent||0);
+  gEl.className = `metric-value ${(d.growth_percent||0)>=0?'gold':'red'}`;
+
+  buildSparkline(`spark-${key}`, eq, EA_CONFIG[key].color);
+}
+
+// ── RENDER HERO ──
+function renderHero(){
+  let tb=0, tp=0, tm=0, lt=null;
+  Object.keys(allData).forEach(k=>{
+    const d = allData[k]&&allData[k].length>0 ? allData[k][0] : null;
+    if(!d) return;
+    tb += parseFloat(d.balance||0);
+    tp += parseFloat(d.total_pnl||0);
+    tm += parseFloat(d.monthly_pnl||0);
+    if(!lt||new Date(d.recorded_at)>new Date(lt)) lt=d.recorded_at;
+  });
+
+  document.getElementById('hero-total').textContent = fBal(tb);
+
+  const tEl=document.getElementById('h-total-pnl');
+  tEl.textContent=fUSD(tp); tEl.className='hs-value '+(tp>=0?'green':'red');
+
+  const mEl=document.getElementById('h-monthly-pnl');
+  mEl.textContent=fUSD(tm); mEl.className='hs-value '+(tm>=0?'green':'red');
+
+  if(lt){
+    const dt=new Date(lt);
+    document.getElementById('h-update').textContent =
+      dt.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+' '+
+      dt.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
   }
-  ['all','3m','1m','1w'].forEach(r=>{document.getElementById('r-'+r).style.color=r==='all'?'var(--accent)':'var(--muted)';});
-  buildDetailChart(eq,cfg.color);
-  document.getElementById('home-page').style.display='none';
-  document.getElementById('detail-page').style.display='block';
+}
+
+// ── OPEN DETAIL ──
+function openDetail(key){
+  currentEA=key; currentRange='all';
+  const cfg = EA_CONFIG[key];
+  const d = allData[key]&&allData[key].length>0 ? allData[key][0] : null;
+  const eq = allEquity[key]||[];
+
+  document.getElementById('d-header-label').textContent = cfg.name+' // NODE DETAILS';
+  document.getElementById('d-port-label').textContent = 'PORT #'+cfg.port;
+  document.getElementById('d-name').textContent = cfg.name;
+  document.getElementById('d-name').className = 'd-ea-name '+cfg.nameClass;
+  document.getElementById('d-sub').textContent = 'PORT #'+cfg.port+' // XAUUSD // LIVE';
+
+  if(d){
+    document.getElementById('d-balance').textContent = fBal(d.balance);
+    document.getElementById('d-equity').textContent  = fBal(d.equity);
+
+    const fEl=document.getElementById('d-floating');
+    fEl.textContent=fUSD(d.floating_pnl||0);
+    fEl.style.color=(d.floating_pnl||0)>=0?'var(--green)':'var(--red)';
+
+    const bigProfit = document.getElementById('d-profit-big');
+    bigProfit.textContent = fUSD(d.total_pnl||0);
+    bigProfit.className = 'd-profit-big '+(d.total_pnl>=0?'green':'red');
+
+    const set=(id,val,cls)=>{ const el=document.getElementById(id); el.textContent=val; if(cls)el.className='ds-value '+cls; };
+    set('d-total-pnl', fUSD(d.total_pnl||0),  d.total_pnl>=0?'green':'red');
+    set('d-month-pnl', fUSD(d.monthly_pnl||0), d.monthly_pnl>=0?'green':'red');
+    set('d-daily-pnl', fUSD(d.daily_pnl||0),   d.daily_pnl>=0?'cyan':'red');
+    set('d-growth',    fPct(d.growth_percent||0), d.growth_percent>=0?'gold':'red');
+    set('d-winrate',   (d.win_rate||0).toFixed(1)+'%', 'gold');
+    set('d-pf',        (d.profit_factor||0).toFixed(2), 'cyan');
+    set('d-dd',        (d.drawdown_percent||0).toFixed(2)+'%', 'red');
+    set('d-open',      d.open_orders||0, 'gold');
+
+    const pnlSet=(id,val)=>{ const el=document.getElementById(id); el.textContent=fUSD(val); el.className='pnl-td-value '+(val>=0?'green':'red'); };
+    pnlSet('dp-daily',  d.daily_pnl||0);
+    pnlSet('dp-month',  d.monthly_pnl||0);
+    pnlSet('dp-total',  d.total_pnl||0);
+    document.getElementById('dp-trades').textContent = d.total_trades||0;
+    document.getElementById('dp-winlose').textContent = `${d.winning_trades||0} W / ${d.losing_trades||0} L`;
+  }
+
+  // Range buttons reset
+  ['all','3m','1m','1w'].forEach(r=>{
+    document.getElementById('r-'+r).className = r==='all'?'range-btn active':'range-btn';
+  });
+
+  buildDetailChart(eq, cfg.color);
+  document.getElementById('home-page').style.display = 'none';
+  document.getElementById('detail-page').style.display = 'block';
   window.scrollTo(0,0);
 }
 
 function closeDetail(){
-  document.getElementById('detail-page').style.display='none';
-  document.getElementById('home-page').style.display='block';
-  if(detailChart){detailChart.destroy();detailChart=null;}
+  document.getElementById('detail-page').style.display = 'none';
+  document.getElementById('home-page').style.display   = 'block';
+  if(detailChart){ detailChart.destroy(); detailChart=null; }
 }
 
-// Detail chart uses PROFIT column for main line
-function buildDetailChart(eq,color){
-  if(detailChart){detailChart.destroy();detailChart=null;}
-  const f=filterRange(eq,currentRange);
-  if(!f||f.length<2)return;
-  const labels=f.map(d=>{const dt=new Date(d.recorded_at);return dt.toLocaleDateString('en-GB',{day:'2-digit',month:'short'});});
-  const profitV=f.map(d=>parseFloat(d.profit||0));
-  const ctx=document.getElementById('detailChart').getContext('2d');
-  const g=ctx.createLinearGradient(0,0,0,260);
-  g.addColorStop(0,color+'40');g.addColorStop(1,color+'00');
-  // Zero line color
-  const minP=Math.min(...profitV);
-  detailChart=new Chart(ctx,{type:'line',data:{labels,datasets:[
-    {label:'Profit ($)',data:profitV,borderColor:color,backgroundColor:g,borderWidth:2,pointRadius:f.length>30?0:3,fill:true,tension:0.4}
-  ]},options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},
-    plugins:{
-      legend:{labels:{color:'#556070',font:{family:'DM Mono',size:10},boxWidth:20,padding:14}},
-      tooltip:{backgroundColor:'#0f1318',borderColor:'#1c2330',borderWidth:1,titleColor:'#556070',bodyColor:'#dde3ed',titleFont:{family:'DM Mono',size:10},bodyFont:{family:'DM Mono',size:11},
-        callbacks:{label:c=>`Profit: ${c.parsed.y>=0?'+':''}$${c.parsed.y.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`}
-      }
+// ── DETAIL CHART ──
+function buildDetailChart(eq, color){
+  if(detailChart){ detailChart.destroy(); detailChart=null; }
+  const f = filterRange(eq, currentRange);
+  if(!f||f.length<2) return;
+
+  const labels = f.map(d=>{
+    const dt=new Date(d.recorded_at);
+    return dt.toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
+  });
+  const profitV = f.map(d=>parseFloat(d.profit||0));
+  const ctx = document.getElementById('detailChart').getContext('2d');
+
+  // Gradient fill
+  const g = ctx.createLinearGradient(0,0,0,280);
+  g.addColorStop(0, color+'55'); g.addColorStop(1, color+'00');
+
+  // Zero baseline
+  const zeroColor = 'rgba(90,122,142,0.3)';
+
+  detailChart = new Chart(ctx,{
+    type:'line',
+    data:{
+      labels,
+      datasets:[{
+        label:'Profit ($)',
+        data:profitV,
+        borderColor:color,
+        backgroundColor:g,
+        borderWidth:2,
+        pointRadius: f.length>60 ? 0 : 3,
+        pointBackgroundColor:color,
+        pointBorderColor: 'var(--void)',
+        pointBorderWidth:1,
+        fill:true,
+        tension:0.4,
+      }]
     },
-    scales:{
-      x:{grid:{color:'rgba(28,35,48,0.5)'},ticks:{color:'#556070',font:{family:'DM Mono',size:9},maxTicksLimit:8}},
-      y:{grid:{color:'rgba(28,35,48,0.5)'},
-        ticks:{color:'#556070',font:{family:'DM Mono',size:9},callback:v=>(v>=0?'+$':'-$')+Math.abs(v).toLocaleString('en-US')},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      interaction:{intersect:false, mode:'index'},
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'#060c12',
+          borderColor: color+'80',
+          borderWidth:1,
+          titleColor:'#5a7a8e',
+          bodyColor:'#c8dce8',
+          titleFont:{family:'Space Mono',size:9},
+          bodyFont:{family:'Space Mono',size:11},
+          padding:12,
+          callbacks:{
+            label:c=>`PROFIT: ${c.parsed.y>=0?'+':''}$${c.parsed.y.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`
+          }
+        }
+      },
+      scales:{
+        x:{
+          grid:{color:'rgba(15,32,48,0.8)', borderColor:'transparent'},
+          ticks:{color:'#2a4458', font:{family:'Space Mono',size:8}, maxTicksLimit:10}
+        },
+        y:{
+          grid:{color:'rgba(15,32,48,0.8)', borderColor:'transparent'},
+          ticks:{
+            color:'#2a4458',
+            font:{family:'Space Mono',size:8},
+            callback: v=>(v>=0?'+$':'-$')+Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:0})
+          }
+        }
       }
     }
-  }});
+  });
 }
 
-function filterRange(data,range){
-  if(range==='all'||!data)return data;
-  const now=new Date(),cut=new Date();
-  if(range==='1w')cut.setDate(now.getDate()-7);
-  if(range==='1m')cut.setMonth(now.getMonth()-1);
-  if(range==='3m')cut.setMonth(now.getMonth()-3);
+function filterRange(data, range){
+  if(range==='all'||!data) return data;
+  const now=new Date(), cut=new Date();
+  if(range==='1w') cut.setDate(now.getDate()-7);
+  if(range==='1m') cut.setMonth(now.getMonth()-1);
+  if(range==='3m') cut.setMonth(now.getMonth()-3);
   return data.filter(d=>new Date(d.recorded_at)>=cut);
 }
 
 function setRange(r){
   currentRange=r;
-  ['all','3m','1m','1w'].forEach(x=>{document.getElementById('r-'+x).style.color=x===r?'var(--accent)':'var(--muted)';});
-  if(currentEA)buildDetailChart(allEquity[currentEA],EA_CONFIG[currentEA].color);
+  ['all','3m','1m','1w'].forEach(x=>{
+    document.getElementById('r-'+x).className = x===r?'range-btn active':'range-btn';
+  });
+  if(currentEA) buildDetailChart(allEquity[currentEA], EA_CONFIG[currentEA].color);
 }
 
+// ── INIT ──
 async function init(){
   await Promise.all(Object.keys(EA_CONFIG).map(async key=>{
-    const[stats,equity]=await Promise.all([
-      fetchSupa(`${key}_daily_stats`,'order=recorded_at.desc&limit=1'),
-      fetchSupa(`${key}_equity_curve`,'order=recorded_at.asc&limit=365')
+    const [stats, equity] = await Promise.all([
+      fetchSupa(`${key}_daily_stats`,  'order=recorded_at.desc&limit=1'),
+      fetchSupa(`${key}_equity_curve`, 'order=recorded_at.asc&limit=730')
     ]);
-    allData[key]=stats;allEquity[key]=equity;
-    renderCard(key,stats,equity);
+    allData[key]   = stats;
+    allEquity[key] = equity;
+    renderCard(key, stats, equity);
   }));
   renderHero();
-  setTimeout(()=>{const o=document.getElementById('loading');o.style.opacity='0';setTimeout(()=>o.style.display='none',500);},1600);
+
+  setTimeout(()=>{
+    const o = document.getElementById('loading');
+    o.style.opacity='0';
+    setTimeout(()=>o.style.display='none', 800);
+  }, 2200);
 }
 
 init();
