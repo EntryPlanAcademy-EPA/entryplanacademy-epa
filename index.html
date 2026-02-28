@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EntryPlan Academy — Systems Online</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,600;0,700;1,300&family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
   --void: #020508;
@@ -37,7 +36,7 @@
 html { scroll-behavior:smooth; }
 
 body {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'Inter', sans-serif;
   background: var(--void);
   color: var(--text);
   min-height: 100vh;
@@ -66,6 +65,9 @@ body {
 @keyframes nda { from{transform:scale(1) translate(0,0)} to{transform:scale(1.09) translate(22px,-18px)} }
 @keyframes ndb { from{transform:scale(1) translate(0,0)} to{transform:scale(1.06) translate(-18px,24px)} }
 
+/* ── SPACECRAFT CANVAS ── */
+#ship-cv { position:fixed; inset:0; z-index:1; pointer-events:none }
+
 /* SCAN LINE */
 body::after {
   content: '';
@@ -87,55 +89,63 @@ body::after {
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   z-index: 9999;
-  transition: opacity 0.8s;
+  transition: opacity 1.4s cubic-bezier(.4,0,.2,1);
 }
-.load-logo {
-  font-family: 'Orbitron', monospace;
-  font-size: 32px; font-weight: 900;
-  letter-spacing: 6px;
-  color: var(--cyan);
-  text-shadow: 0 0 30px var(--cyan-glow), 0 0 60px var(--cyan-glow);
-  animation: flicker 3s infinite;
+.ld-orrery {
+  width: 96px; height: 96px;
+  position: relative; margin-bottom: 36px;
+  display: flex; align-items: center; justify-content: center;
 }
-.load-logo span { color: var(--gold); text-shadow: 0 0 30px var(--gold-glow); }
-@keyframes flicker {
-  0%,95%,100%{opacity:1} 96%{opacity:0.7} 97%{opacity:1} 98%{opacity:0.8}
+.ld-orrery::before {
+  content: ''; position: absolute; inset: 0; border-radius: 50%;
+  border: 1px solid transparent;
+  border-top-color: var(--cyan);
+  border-left-color: rgba(0,212,255,0.35);
+  animation: spin 2.2s linear infinite;
+  box-shadow: 0 0 28px var(--cyan-glow), inset 0 0 12px rgba(0,212,255,0.06);
 }
-.load-sub {
-  font-family: 'Space Mono', monospace;
-  font-size: 10px; letter-spacing: 4px;
-  color: var(--text2); margin-top: 6px;
-  text-transform: uppercase;
+.ld-orrery::after {
+  content: ''; position: absolute; inset: 16px; border-radius: 50%;
+  border: 1px solid rgba(0,212,255,0.12);
+  border-bottom-color: rgba(0,212,255,0.45);
+  animation: spin 3.8s linear infinite reverse;
 }
-.load-bar-wrap {
-  width: 240px; height: 1px;
-  background: var(--border2);
-  margin-top: 28px; position: relative; overflow: hidden;
+.ld-core {
+  width: 9px; height: 9px;
+  background: var(--text);
+  border-radius: 50%; z-index: 1;
+  box-shadow: 0 0 16px var(--cyan), 0 0 32px var(--cyan-glow), 0 0 64px rgba(0,212,255,0.15);
 }
-.load-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--cyan), var(--gold));
-  box-shadow: 0 0 8px var(--cyan-glow);
-  animation: loadbar 2s ease forwards;
+@keyframes spin { to { transform: rotate(360deg) } }
+
+.ld-wordmark {
+  font-family: 'Cormorant', serif;
+  font-size: 28px; font-weight: 300;
+  letter-spacing: 10px; color: var(--text);
+  text-transform: uppercase; margin-bottom: 6px;
+  text-shadow: 0 0 40px rgba(255,255,255,0.18);
 }
-@keyframes loadbar { from{width:0} to{width:100%} }
-.load-status {
-  font-family: 'Space Mono', monospace;
-  font-size: 9px; color: var(--text3);
-  letter-spacing: 2px; margin-top: 12px;
-  text-transform: uppercase;
-  animation: blink 1s infinite;
+.ld-wordmark em { color: var(--cyan); font-style: normal }
+.ld-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: 5px;
+  color: var(--text3); text-transform: uppercase; margin-bottom: 36px;
 }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-.load-lines {
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column;
-  justify-content: flex-end; padding: 20px;
-  font-family: 'Space Mono', monospace;
-  font-size: 8px; color: var(--text3);
-  letter-spacing: 1px; overflow: hidden;
+.ld-track { width: 200px; height: 1px; background: var(--border2); overflow: hidden }
+.ld-fill {
+  height: 100%; width: 0;
+  background: linear-gradient(90deg, var(--border2), var(--cyan), var(--text));
+  box-shadow: 0 0 10px var(--cyan-glow);
+  animation: ldfill 2.4s cubic-bezier(.4,0,.2,1) forwards;
 }
-.load-line { opacity: 0; animation: fadeInLine 0.3s forwards; }
+@keyframes ldfill { to { width: 100% } }
+.ld-status {
+  font-family: 'DM Mono', monospace; font-size: 8px;
+  letter-spacing: 3px; color: var(--text3);
+  margin-top: 14px; text-transform: uppercase;
+  animation: blink 1.8s ease infinite;
+}
+@keyframes blink { 0%,100%{opacity:.3} 50%{opacity:1} }
 
 /* ── HEADER ── */
 #app { position: relative; z-index: 2; }
@@ -158,27 +168,45 @@ header::after {
 }
 
 .logo {
-  display: flex; align-items: baseline; gap: 10px;
+  display: flex; align-items: center; gap: 14px;
 }
+.logo-orb {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 1px solid rgba(0,212,255,0.25);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  box-shadow: 0 0 16px var(--cyan-glow), inset 0 0 8px rgba(0,212,255,0.05);
+  flex-shrink: 0;
+}
+.logo-orb::before {
+  content: ''; position: absolute; inset: 6px; border-radius: 50%;
+  border: 1px solid rgba(0,212,255,0.15);
+}
+.logo-dot {
+  width: 6px; height: 6px; background: var(--text); border-radius: 50%;
+  box-shadow: 0 0 10px var(--cyan), 0 0 20px var(--cyan-glow);
+}
+.logo-copy {}
 .logo-main {
-  font-family: 'Orbitron', monospace;
-  font-size: 18px; font-weight: 700;
-  letter-spacing: 3px; color: var(--cyan);
-  text-shadow: 0 0 20px var(--cyan-glow);
+  font-family: 'Cormorant', serif;
+  font-size: 17px; font-weight: 300;
+  letter-spacing: 6px; color: var(--text);
+  text-transform: uppercase; line-height: 1;
+  text-shadow: 0 0 30px rgba(255,255,255,0.15);
 }
-.logo-main span { color: var(--gold); text-shadow: 0 0 20px var(--gold-glow); }
+.logo-main em { color: var(--cyan); font-style: normal; }
 .logo-tag {
-  font-family: 'Space Mono', monospace;
-  font-size: 9px; letter-spacing: 3px;
-  color: var(--text3); text-transform: uppercase;
+  font-family: 'DM Mono', monospace;
+  font-size: 7px; letter-spacing: 3px;
+  color: var(--text3); text-transform: uppercase; margin-top: 3px;
 }
 
 .header-right { display: flex; align-items: center; gap: 24px; }
 
 .sys-status {
   display: flex; align-items: center; gap: 8px;
-  font-family: 'Space Mono', monospace;
-  font-size: 9px; letter-spacing: 2px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; font-weight: 500; letter-spacing: 1.5px;
   color: var(--green); text-transform: uppercase;
 }
 .sys-dot {
@@ -191,9 +219,9 @@ header::after {
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
 
 .hdr-time {
-  font-family: 'Space Mono', monospace;
-  font-size: 11px; color: var(--text2);
-  letter-spacing: 1px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px; font-weight: 400; color: var(--text2);
+  letter-spacing: 0.5px;
 }
 .hdr-corner {
   width: 10px; height: 10px;
@@ -210,8 +238,8 @@ header::after {
 }
 .hero-bg-text {
   position: absolute; right: -10px; bottom: -30px;
-  font-family: 'Orbitron', monospace;
-  font-size: 180px; font-weight: 900;
+  font-family: 'Cormorant', serif;
+  font-size: 220px; font-weight: 700;
   color: rgba(0,212,255,0.02);
   letter-spacing: -10px;
   pointer-events: none; line-height: 1;
@@ -219,8 +247,8 @@ header::after {
 }
 
 .hero-top {
-  font-family: 'Space Mono', monospace;
-  font-size: 9px; letter-spacing: 4px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; font-weight: 500; letter-spacing: 3px;
   color: var(--cyan); text-transform: uppercase;
   margin-bottom: 16px;
   display: flex; align-items: center; gap: 12px;
@@ -228,16 +256,16 @@ header::after {
 .hero-top::before { content:'//'; opacity:0.5; }
 
 .hero-balance {
-  font-family: 'Orbitron', monospace;
-  font-size: clamp(40px, 6vw, 76px);
-  font-weight: 900; line-height: 1;
+  font-family: 'Cormorant', serif;
+  font-size: clamp(56px, 8vw, 110px);
+  font-weight: 600; line-height: 1;
   letter-spacing: 2px;
   color: var(--text);
   margin-bottom: 8px;
 }
 .hero-balance-label {
-  font-family: 'Space Mono', monospace;
-  font-size: 9px; letter-spacing: 3px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; font-weight: 400; letter-spacing: 2px;
   color: var(--text3); text-transform: uppercase;
   margin-bottom: 32px;
 }
@@ -253,15 +281,15 @@ header::after {
 }
 .hero-stat:last-child { border: none; }
 .hs-label {
-  font-family: 'Space Mono', monospace;
-  font-size: 8px; letter-spacing: 2px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px; font-weight: 500; letter-spacing: 1.5px;
   color: var(--text3); text-transform: uppercase;
   margin-bottom: 6px;
 }
 .hs-value {
-  font-family: 'Orbitron', monospace;
-  font-size: 22px; font-weight: 700;
-  letter-spacing: 1px;
+  font-family: 'Cormorant', serif;
+  font-size: 28px; font-weight: 600;
+  letter-spacing: .5px;
 }
 .hs-value.green { color: var(--green); text-shadow: 0 0 12px rgba(0,255,136,0.4); }
 .hs-value.red   { color: var(--red);   text-shadow: 0 0 12px rgba(255,51,102,0.4); }
@@ -277,13 +305,13 @@ header::after {
   margin-bottom: 20px;
 }
 .section-title {
-  font-family: 'Space Mono', monospace;
-  font-size: 9px; letter-spacing: 4px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px; font-weight: 500; letter-spacing: 3px;
   color: var(--text3); text-transform: uppercase;
 }
 .section-line { flex: 1; height: 1px; background: var(--border); }
 .section-num {
-  font-family: 'Space Mono', monospace;
+  font-family: 'DM Mono', monospace;
   font-size: 8px; color: var(--text3); letter-spacing: 1px;
 }
 
@@ -338,8 +366,8 @@ header::after {
   display: flex; align-items: flex-start; justify-content: space-between;
 }
 .card-name {
-  font-family: 'Orbitron', monospace;
-  font-size: 18px; font-weight: 700;
+  font-family: 'Cormorant', serif;
+  font-size: 26px; font-weight: 600;
   letter-spacing: 2px; margin-bottom: 3px;
 }
 .card-name.gold   { color: var(--gold); }
@@ -347,14 +375,14 @@ header::after {
 .card-name.purple { color: var(--purple); }
 
 .card-port {
-  font-family: 'Space Mono', monospace;
-  font-size: 8px; color: var(--text3);
-  letter-spacing: 2px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px; font-weight: 400; color: var(--text3);
+  letter-spacing: 1px;
 }
 .card-live {
   display: flex; align-items: center; gap: 5px;
-  font-family: 'Space Mono', monospace;
-  font-size: 8px; letter-spacing: 2px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px; font-weight: 500; letter-spacing: 1px;
   color: var(--green);
   background: var(--green-dim);
   border: 1px solid rgba(0,255,136,0.2);
@@ -370,14 +398,14 @@ header::after {
 .card-body { padding: 16px 20px; }
 
 .card-profit-label {
-  font-family: 'Space Mono', monospace;
-  font-size: 8px; letter-spacing: 2px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px; font-weight: 500; letter-spacing: 1.5px;
   color: var(--text3); text-transform: uppercase;
   margin-bottom: 4px;
 }
 .card-profit-value {
-  font-family: 'Orbitron', monospace;
-  font-size: 28px; font-weight: 700;
+  font-family: 'Cormorant', serif;
+  font-size: 44px; font-weight: 700;
   letter-spacing: 1px; margin-bottom: 12px;
   line-height: 1;
 }
@@ -398,14 +426,14 @@ header::after {
 }
 .metric {}
 .metric-label {
-  font-family: 'Space Mono', monospace;
-  font-size: 7px; letter-spacing: 2px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px; font-weight: 500; letter-spacing: 1px;
   color: var(--text3); text-transform: uppercase;
   margin-bottom: 3px;
 }
 .metric-value {
-  font-family: 'Space Mono', monospace;
-  font-size: 13px; font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px; font-weight: 600;
 }
 .metric-value.green { color: var(--green); }
 .metric-value.red   { color: var(--red); }
@@ -423,8 +451,8 @@ header::after {
   border: 1px solid var(--border2);
   color: var(--text2);
   padding: 8px;
-  font-family: 'Space Mono', monospace;
-  font-size: 9px; letter-spacing: 2px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; font-weight: 500; letter-spacing: 1.5px;
   text-transform: uppercase; cursor: pointer;
   transition: all 0.2s;
   display: flex; align-items: center; justify-content: center; gap: 8px;
@@ -455,17 +483,17 @@ header::after {
   background: none; border: 1px solid var(--border2);
   color: var(--text2);
   padding: 7px 16px;
-  font-family: 'Space Mono', monospace;
-  font-size: 9px; letter-spacing: 2px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; font-weight: 500; letter-spacing: 1.5px;
   text-transform: uppercase; cursor: pointer;
   transition: all 0.2s;
 }
 .btn-back:hover { border-color: var(--cyan); color: var(--cyan); }
 
 .d-header-title {
-  font-family: 'Orbitron', monospace;
-  font-size: 11px; letter-spacing: 3px;
-  color: var(--text2);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px; font-weight: 500; letter-spacing: 2px;
+  color: var(--text2); text-transform: uppercase;
 }
 
 .d-content { max-width: 1100px; margin: 0 auto; padding: 40px; }
@@ -479,30 +507,30 @@ header::after {
 }
 .d-hero-left {}
 .d-ea-name {
-  font-family: 'Orbitron', monospace;
-  font-size: 42px; font-weight: 900;
-  letter-spacing: 4px; line-height: 1;
+  font-family: 'Cormorant', serif;
+  font-size: 62px; font-weight: 700;
+  letter-spacing: 3px; line-height: 1;
   margin-bottom: 6px;
 }
 .d-ea-name.gold   { color: var(--gold); text-shadow: 0 0 40px var(--gold-glow); }
 .d-ea-name.cyan   { color: var(--cyan); text-shadow: 0 0 40px var(--cyan-glow); }
 .d-ea-name.purple { color: var(--purple); text-shadow: 0 0 40px rgba(139,92,246,0.4); }
 .d-ea-sub {
-  font-family: 'Space Mono', monospace;
-  font-size: 9px; letter-spacing: 3px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; font-weight: 400; letter-spacing: 2px;
   color: var(--text3); text-transform: uppercase;
   margin-bottom: 24px;
 }
 .d-balance {
-  font-family: 'Orbitron', monospace;
-  font-size: 52px; font-weight: 900;
+  font-family: 'Cormorant', serif;
+  font-size: 56px; font-weight: 600;
   color: var(--text); line-height: 1;
-  letter-spacing: 1px;
+  letter-spacing: .5px;
 }
 .d-balance-sub {
-  font-family: 'Space Mono', monospace;
-  font-size: 9px; color: var(--text3);
-  letter-spacing: 2px; margin-top: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; font-weight: 400; color: var(--text3);
+  letter-spacing: 1px; margin-top: 6px;
 }
 .d-balance-sub span { color: var(--text2); }
 
@@ -510,16 +538,16 @@ header::after {
   text-align: right;
 }
 .d-profit-big {
-  font-family: 'Orbitron', monospace;
-  font-size: 36px; font-weight: 700;
-  line-height: 1; letter-spacing: 1px;
+  font-family: 'Cormorant', serif;
+  font-size: 40px; font-weight: 600;
+  line-height: 1; letter-spacing: .5px;
   margin-bottom: 4px;
 }
 .d-profit-big.green { color: var(--green); text-shadow: 0 0 20px rgba(0,255,136,0.4); }
 .d-profit-big.red   { color: var(--red);   text-shadow: 0 0 20px rgba(255,51,102,0.4); }
 .d-profit-label {
-  font-family: 'Space Mono', monospace;
-  font-size: 8px; letter-spacing: 2px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px; font-weight: 500; letter-spacing: 1.5px;
   color: var(--text3); text-transform: uppercase;
 }
 
@@ -546,14 +574,14 @@ header::after {
 .d-stat.accent-cyan::before  { background: var(--cyan);  box-shadow: 0 0 8px var(--cyan); }
 
 .ds-label {
-  font-family: 'Space Mono', monospace;
-  font-size: 7px; letter-spacing: 2px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px; font-weight: 500; letter-spacing: 1.5px;
   color: var(--text3); text-transform: uppercase;
   margin-bottom: 8px;
 }
 .ds-value {
-  font-family: 'Orbitron', monospace;
-  font-size: 18px; font-weight: 700;
+  font-family: 'Cormorant', serif;
+  font-size: 24px; font-weight: 600;
   line-height: 1;
 }
 .ds-value.green { color: var(--green); }
@@ -575,8 +603,8 @@ header::after {
   display: flex; align-items: center; justify-content: space-between;
 }
 .d-panel-title {
-  font-family: 'Space Mono', monospace;
-  font-size: 9px; letter-spacing: 3px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; font-weight: 500; letter-spacing: 2px;
   color: var(--text3); text-transform: uppercase;
   display: flex; align-items: center; gap: 8px;
 }
@@ -586,8 +614,8 @@ header::after {
   display: flex; gap: 4px;
 }
 .range-btn {
-  font-family: 'Space Mono', monospace;
-  font-size: 8px; letter-spacing: 1px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; font-weight: 500; letter-spacing: 1px;
   padding: 4px 10px;
   border: 1px solid var(--border2);
   background: transparent; color: var(--text3);
@@ -616,15 +644,15 @@ header::after {
   transition: background 0.2s;
 }
 .pnl-td-label {
-  font-family: 'Space Mono', monospace;
-  font-size: 9px; letter-spacing: 2px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px; font-weight: 500; letter-spacing: 1px;
   color: var(--text3); text-transform: uppercase;
   display: flex; align-items: center; gap: 8px;
 }
 .pnl-td-label::before { content: '►'; font-size: 6px; color: var(--border2); }
 .pnl-td-value {
-  font-family: 'Space Mono', monospace;
-  font-size: 14px; font-weight: 700;
+  font-family: 'Cormorant', serif;
+  font-size: 22px; font-weight: 600;
 }
 .pnl-td-value.green { color: var(--green); }
 .pnl-td-value.red   { color: var(--red); }
@@ -632,9 +660,9 @@ header::after {
 
 /* Footer */
 .page-footer {
-  font-family: 'Space Mono', monospace;
-  font-size: 8px; color: var(--text3);
-  letter-spacing: 1px; text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; font-weight: 400; color: var(--text3);
+  letter-spacing: 0.5px; text-align: center;
   padding: 20px 0 0; line-height: 2.2;
 }
 
@@ -665,21 +693,15 @@ header::after {
 
 <!-- ── LOADING ── -->
 <canvas id="cv"></canvas>
+<canvas id="ship-cv"></canvas>
 <div class="neb neb-a"></div>
 <div class="neb neb-b"></div>
 <div id="loading">
-  <div style="position:relative">
-    <div class="load-logo">ENTRY<span>PLAN</span></div>
-    <div class="load-sub">ACADEMY // TRADING SYSTEMS</div>
-    <div class="load-bar-wrap" style="margin-top:24px"><div class="load-bar-fill"></div></div>
-    <div class="load-status">INITIALIZING DATA STREAMS</div>
-  </div>
-  <div class="load-lines" style="position:fixed;bottom:0;left:0;right:0;height:80px">
-    <div class="load-line" style="animation-delay:0.2s">// CONNECTING TO SUPABASE ENDPOINT...</div>
-    <div class="load-line" style="animation-delay:0.6s">// FETCHING PORTFOLIO METRICS...</div>
-    <div class="load-line" style="animation-delay:1.0s">// RENDERING PROFIT CURVES...</div>
-    <div class="load-line" style="animation-delay:1.4s">// SYSTEMS ONLINE ✓</div>
-  </div>
+  <div class="ld-orrery"><div class="ld-core"></div></div>
+  <div class="ld-wordmark">Entry<em>Plan</em></div>
+  <div class="ld-sub">Academy · Systems Online</div>
+  <div class="ld-track"><div class="ld-fill"></div></div>
+  <div class="ld-status">Calibrating data streams&hellip;</div>
 </div>
 
 <!-- ── APP ── -->
@@ -688,8 +710,11 @@ header::after {
 <!-- HEADER -->
 <header>
   <div class="logo">
-    <div class="logo-main">ENTRY<span>PLAN</span></div>
-    <div class="logo-tag">// ACADEMY</div>
+    <div class="logo-orb"><div class="logo-dot"></div></div>
+    <div class="logo-copy">
+      <div class="logo-main">Entry<em>Plan</em></div>
+      <div class="logo-tag">Academy · Observatory</div>
+    </div>
   </div>
   <div class="header-right">
     <div class="sys-status"><div class="sys-dot"></div>ALL SYSTEMS ONLINE</div>
@@ -877,7 +902,7 @@ header::after {
   <div class="d-header">
     <button class="btn-back" onclick="closeDetail()">◄ BACK</button>
     <div class="d-header-title" id="d-header-label">—</div>
-    <div style="font-family:'Space Mono',monospace;font-size:8px;color:var(--text3);letter-spacing:2px" id="d-port-label">—</div>
+    <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--text3);letter-spacing:2px" id="d-port-label">—</div>
   </div>
 
   <div class="d-content">
@@ -1211,8 +1236,8 @@ function buildDetailChart(eq, color){
           borderWidth:1,
           titleColor:'#5a7a8e',
           bodyColor:'#c8dce8',
-          titleFont:{family:'Space Mono',size:9},
-          bodyFont:{family:'Space Mono',size:11},
+          titleFont:{family:'DM Mono',size:9},
+          bodyFont:{family:'DM Mono',size:11},
           padding:12,
           callbacks:{
             label:c=>`PROFIT: ${c.parsed.y>=0?'+':''}$${c.parsed.y.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`
@@ -1222,13 +1247,13 @@ function buildDetailChart(eq, color){
       scales:{
         x:{
           grid:{color:'rgba(15,32,48,0.8)', borderColor:'transparent'},
-          ticks:{color:'#2a4458', font:{family:'Space Mono',size:8}, maxTicksLimit:10}
+          ticks:{color:'#2a4458', font:{family:'DM Mono',size:8}, maxTicksLimit:10}
         },
         y:{
           grid:{color:'rgba(15,32,48,0.8)', borderColor:'transparent'},
           ticks:{
             color:'#2a4458',
-            font:{family:'Space Mono',size:8},
+            font:{family:'DM Mono',size:8},
             callback: v=>(v>=0?'+$':'-$')+Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:0})
           }
         }
@@ -1270,8 +1295,8 @@ async function init(){
   setTimeout(()=>{
     const o = document.getElementById('loading');
     o.style.opacity='0';
-    setTimeout(()=>o.style.display='none', 800);
-  }, 2200);
+    setTimeout(()=>o.style.display='none', 1400);
+  }, 2800);
 }
 
 // ── STARFIELD ──
@@ -1335,6 +1360,273 @@ async function init(){
     requestAnimationFrame(frame);
   }
   mk(); frame(); addEventListener('resize',mk);
+})();
+
+// ── SPACECRAFT ──
+(function(){
+  const cv = document.getElementById('ship-cv');
+  const cx = cv.getContext('2d');
+  let W, H;
+
+  function resize(){ W = cv.width = innerWidth; H = cv.height = innerHeight; }
+  resize(); addEventListener('resize', resize);
+
+  // Ship definitions — each has a path-drawing function, scale, speed, depth
+  const SHIPS = [];
+
+  // Draw stealth bomber / triangular recon ship
+  function drawStealthBomber(cx, scale, alpha, enginePulse) {
+    cx.save();
+    cx.globalAlpha = alpha;
+    const s = scale;
+
+    // Main hull — dark metallic body
+    cx.beginPath();
+    cx.moveTo(0, -38*s);          // nose
+    cx.lineTo(-22*s, 8*s);        // left wing tip
+    cx.lineTo(-14*s, 12*s);
+    cx.lineTo(-8*s, 6*s);         // left engine nacelle back
+    cx.lineTo(0, 18*s);           // center tail
+    cx.lineTo(8*s, 6*s);
+    cx.lineTo(14*s, 12*s);
+    cx.lineTo(22*s, 8*s);         // right wing tip
+    cx.closePath();
+
+    const hullGrad = cx.createLinearGradient(0, -38*s, 0, 18*s);
+    hullGrad.addColorStop(0,   'rgba(180,200,220,0.82)');
+    hullGrad.addColorStop(0.3, 'rgba(100,130,160,0.75)');
+    hullGrad.addColorStop(1,   'rgba(30,50,80,0.65)');
+    cx.fillStyle = hullGrad;
+    cx.fill();
+
+    // Hull edge highlight
+    cx.strokeStyle = 'rgba(140,200,255,0.35)';
+    cx.lineWidth = 0.7*s;
+    cx.stroke();
+
+    // Cockpit / sensor pod
+    cx.beginPath();
+    cx.ellipse(0, -18*s, 4*s, 9*s, 0, 0, Math.PI*2);
+    const cockpitG = cx.createRadialGradient(0, -20*s, 1*s, 0, -18*s, 6*s);
+    cockpitG.addColorStop(0, 'rgba(150,230,255,0.9)');
+    cockpitG.addColorStop(1, 'rgba(20,60,120,0.5)');
+    cx.fillStyle = cockpitG;
+    cx.fill();
+
+    // Center spine line
+    cx.beginPath();
+    cx.moveTo(0, -36*s); cx.lineTo(0, 16*s);
+    cx.strokeStyle = 'rgba(180,220,255,0.25)';
+    cx.lineWidth = 1.2*s;
+    cx.stroke();
+
+    // Panel detail lines on wings
+    cx.strokeStyle = 'rgba(120,180,220,0.18)';
+    cx.lineWidth = 0.5*s;
+    cx.beginPath(); cx.moveTo(-5*s,-10*s); cx.lineTo(-18*s,7*s); cx.stroke();
+    cx.beginPath(); cx.moveTo(5*s,-10*s);  cx.lineTo(18*s,7*s);  cx.stroke();
+    cx.beginPath(); cx.moveTo(-8*s,0); cx.lineTo(-14*s,10*s); cx.stroke();
+    cx.beginPath(); cx.moveTo(8*s,0);  cx.lineTo(14*s,10*s);  cx.stroke();
+
+    // Left engine glow
+    const ep = 0.5 + 0.5 * enginePulse;
+    const eg1 = cx.createRadialGradient(-8*s, 10*s, 0, -8*s, 10*s, 7*s);
+    eg1.addColorStop(0, `rgba(80,180,255,${0.9*ep})`);
+    eg1.addColorStop(0.4, `rgba(40,120,255,${0.5*ep})`);
+    eg1.addColorStop(1, 'transparent');
+    cx.fillStyle = eg1;
+    cx.beginPath(); cx.arc(-8*s, 10*s, 7*s, 0, Math.PI*2); cx.fill();
+
+    // Right engine glow
+    const eg2 = cx.createRadialGradient(8*s, 10*s, 0, 8*s, 10*s, 7*s);
+    eg2.addColorStop(0, `rgba(80,180,255,${0.9*ep})`);
+    eg2.addColorStop(0.4, `rgba(40,120,255,${0.5*ep})`);
+    eg2.addColorStop(1, 'transparent');
+    cx.fillStyle = eg2;
+    cx.beginPath(); cx.arc(8*s, 10*s, 7*s, 0, Math.PI*2); cx.fill();
+
+    // Engine nozzle core bright dot
+    cx.fillStyle = `rgba(200,240,255,${0.95*ep})`;
+    cx.beginPath(); cx.arc(-8*s, 10*s, 1.8*s, 0, Math.PI*2); cx.fill();
+    cx.beginPath(); cx.arc(8*s, 10*s, 1.8*s, 0, Math.PI*2); cx.fill();
+
+    cx.restore();
+  }
+
+  // Draw elongated deep-space cruiser
+  function drawCruiser(cx, scale, alpha, enginePulse) {
+    cx.save();
+    cx.globalAlpha = alpha;
+    const s = scale;
+
+    // Main elongated hull
+    cx.beginPath();
+    cx.moveTo(0, -52*s);           // nose tip
+    cx.lineTo(-5*s, -30*s);
+    cx.lineTo(-14*s, -10*s);
+    cx.lineTo(-18*s, 14*s);
+    cx.lineTo(-10*s, 26*s);
+    cx.lineTo(10*s, 26*s);
+    cx.lineTo(18*s, 14*s);
+    cx.lineTo(14*s, -10*s);
+    cx.lineTo(5*s, -30*s);
+    cx.closePath();
+
+    const hullG = cx.createLinearGradient(-18*s, 0, 18*s, 0);
+    hullG.addColorStop(0,   'rgba(60,90,130,0.7)');
+    hullG.addColorStop(0.5, 'rgba(160,190,220,0.82)');
+    hullG.addColorStop(1,   'rgba(60,90,130,0.7)');
+    cx.fillStyle = hullG;
+    cx.fill();
+    cx.strokeStyle = 'rgba(140,200,255,0.4)';
+    cx.lineWidth = 0.8*s;
+    cx.stroke();
+
+    // Sensor array (front)
+    cx.fillStyle = 'rgba(100,200,255,0.6)';
+    cx.beginPath(); cx.ellipse(0, -45*s, 2*s, 5*s, 0, 0, Math.PI*2); cx.fill();
+
+    // Bridge windows
+    for(let i=-1;i<=1;i++){
+      cx.fillStyle = `rgba(180,230,255,0.7)`;
+      cx.beginPath(); cx.ellipse(i*5*s, -22*s, 1.5*s, 2.5*s, 0, 0, Math.PI*2); cx.fill();
+    }
+
+    // Side thruster pods
+    cx.fillStyle = 'rgba(80,110,160,0.8)';
+    cx.beginPath(); cx.roundRect(-22*s, 0, 6*s, 14*s, 2*s); cx.fill();
+    cx.beginPath(); cx.roundRect(16*s, 0, 6*s, 14*s, 2*s); cx.fill();
+    cx.strokeStyle = 'rgba(120,180,255,0.3)';
+    cx.lineWidth = 0.5*s;
+    cx.stroke();
+
+    // Panel details
+    cx.strokeStyle = 'rgba(150,200,240,0.15)';
+    cx.lineWidth = 0.5*s;
+    for(let y=-8;y<=20;y+=8){
+      cx.beginPath(); cx.moveTo(-13*s,y*s); cx.lineTo(13*s,y*s); cx.stroke();
+    }
+
+    // Engine exhaust — 3 nozzles
+    const ep = 0.5 + 0.5 * enginePulse;
+    [-8,0,8].forEach(ox=>{
+      const eg = cx.createRadialGradient(ox*s, 30*s, 0, ox*s, 30*s, 10*s);
+      eg.addColorStop(0, `rgba(100,200,255,${ep})`);
+      eg.addColorStop(0.3, `rgba(60,140,255,${0.6*ep})`);
+      eg.addColorStop(1, 'transparent');
+      cx.fillStyle = eg;
+      cx.beginPath(); cx.arc(ox*s, 30*s, 10*s, 0, Math.PI*2); cx.fill();
+      cx.fillStyle = `rgba(220,245,255,${ep})`;
+      cx.beginPath(); cx.arc(ox*s, 28*s, 2*s, 0, Math.PI*2); cx.fill();
+    });
+
+    cx.restore();
+  }
+
+  // Trail particle system
+  const particles = [];
+  function spawnTrail(x, y, vx, vy, color) {
+    for(let i=0;i<2;i++){
+      particles.push({
+        x: x + (Math.random()-0.5)*6,
+        y: y + (Math.random()-0.5)*4,
+        vx: vx * (0.1 + Math.random()*0.15) + (Math.random()-0.5)*0.3,
+        vy: vy * (0.1 + Math.random()*0.15) + (Math.random()-0.5)*0.3,
+        life: 1,
+        decay: 0.012 + Math.random()*0.018,
+        r: 1.5 + Math.random()*2.5,
+        color,
+      });
+    }
+  }
+
+  // Spawn ships periodically
+  function spawnShip() {
+    const fromLeft = Math.random() > 0.5;
+    const type = Math.random() > 0.45 ? 'stealth' : 'cruiser';
+    const scale = 0.55 + Math.random() * 0.45;
+    const speed = (0.28 + Math.random() * 0.35) * (type === 'stealth' ? 1.3 : 1);
+    const y = H * (0.08 + Math.random() * 0.55);
+    const angle = (fromLeft ? 0 : Math.PI) + (Math.random()-0.5)*0.18;
+    const vx = Math.cos(angle) * speed;
+    const vy = Math.sin(angle) * speed;
+    // alpha based on scale (smaller = farther = more transparent)
+    const alpha = 0.18 + scale * 0.5;
+
+    SHIPS.push({
+      x: fromLeft ? -120 : W + 120,
+      y,
+      vx, vy,
+      angle,
+      type,
+      scale,
+      alpha,
+      speed,
+      enginePhase: Math.random() * Math.PI * 2,
+      trailColor: type === 'stealth' ? 'rgba(80,180,255,' : 'rgba(100,200,255,',
+    });
+  }
+
+  // Initial ships
+  for(let i=0;i<2;i++){
+    setTimeout(()=>spawnShip(), i * 8000 + 2000);
+  }
+  setInterval(()=>{
+    if(SHIPS.length < 2) spawnShip();
+  }, 14000);
+
+  let t = 0;
+  function frame(){
+    cx.clearRect(0, 0, W, H);
+    t += 0.016;
+
+    // Draw + update particles
+    particles.forEach(p=>{
+      p.x += p.vx; p.y += p.vy;
+      p.life -= p.decay;
+      if(p.life <= 0) return;
+      cx.beginPath();
+      cx.arc(p.x, p.y, p.r * p.life, 0, Math.PI*2);
+      cx.fillStyle = p.color + (p.life * 0.55) + ')';
+      cx.fill();
+    });
+    // Cull dead particles
+    for(let i=particles.length-1;i>=0;i--){
+      if(particles[i].life<=0) particles.splice(i,1);
+    }
+
+    // Draw + update ships
+    for(let i=SHIPS.length-1;i>=0;i--){
+      const ship = SHIPS[i];
+      ship.x += ship.vx;
+      ship.y += ship.vy;
+      ship.enginePhase += 0.05;
+
+      // Spawn trail from engine position (behind ship)
+      const trailX = ship.x - Math.cos(ship.angle) * 18 * ship.scale;
+      const trailY = ship.y - Math.sin(ship.angle) * 18 * ship.scale;
+      spawnTrail(trailX, trailY, -ship.vx, -ship.vy, ship.trailColor);
+
+      // Draw ship
+      cx.save();
+      cx.translate(ship.x, ship.y);
+      // Rotate: ships point in direction of travel
+      cx.rotate(ship.angle + Math.PI/2);
+
+      const ep = Math.sin(ship.enginePhase);
+      if(ship.type === 'stealth') drawStealthBomber(cx, ship.scale, ship.alpha, ep);
+      else drawCruiser(cx, ship.scale, ship.alpha, ep);
+      cx.restore();
+
+      // Remove if off screen
+      if(ship.x < -200 || ship.x > W+200 || ship.y < -200 || ship.y > H+200){
+        SHIPS.splice(i, 1);
+      }
+    }
+
+    requestAnimationFrame(frame);
+  }
+  frame();
 })();
 
 init();
