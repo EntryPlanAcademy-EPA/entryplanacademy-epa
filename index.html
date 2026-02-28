@@ -28,9 +28,9 @@
   --red: #ff3366;
   --red-dim: rgba(255,51,102,0.12);
   --purple: #8b5cf6;
-  --text: #c8dce8;
-  --text2: #5a7a8e;
-  --text3: #2a4458;
+  --text: #ffffff;
+  --text2: #b0cfe8;
+  --text3: #7aaabb;
 }
 
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -45,18 +45,26 @@ body {
   cursor: crosshair;
 }
 
-/* ── GRID BACKGROUND ── */
-body::before {
-  content: '';
-  position: fixed; inset: 0;
-  background-image:
-    linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-  pointer-events: none; z-index: 0;
-  animation: gridScroll 20s linear infinite;
+/* ── STAR CANVAS ── */
+#cv { position:fixed; inset:0; z-index:0; pointer-events:none }
+
+/* ── NEBULA ── */
+.neb { position:fixed; inset:0; z-index:0; pointer-events:none }
+.neb-a {
+  background:
+    radial-gradient(ellipse 70% 50% at 10% 22%, rgba(8,28,100,.22)   0%,transparent 60%),
+    radial-gradient(ellipse 55% 65% at 88% 72%, rgba(5,18,80,.18)    0%,transparent 55%),
+    radial-gradient(ellipse 40% 40% at 52% 48%, rgba(2,10,50,.10)    0%,transparent 70%);
+  animation:nda 55s ease-in-out infinite alternate;
 }
-@keyframes gridScroll { from{background-position:0 0} to{background-position:40px 40px} }
+.neb-b {
+  background:
+    radial-gradient(ellipse 45% 70% at 68% 10%, rgba(8,35,110,.12) 0%,transparent 58%),
+    radial-gradient(ellipse 60% 30% at 20% 82%, rgba(4,22,80,.09)  0%,transparent 52%);
+  animation:ndb 72s ease-in-out infinite alternate;
+}
+@keyframes nda { from{transform:scale(1) translate(0,0)} to{transform:scale(1.09) translate(22px,-18px)} }
+@keyframes ndb { from{transform:scale(1) translate(0,0)} to{transform:scale(1.06) translate(-18px,24px)} }
 
 /* SCAN LINE */
 body::after {
@@ -66,8 +74,8 @@ body::after {
     0deg,
     transparent,
     transparent 2px,
-    rgba(0,0,0,0.08) 2px,
-    rgba(0,0,0,0.08) 4px
+    rgba(0,0,0,0.05) 2px,
+    rgba(0,0,0,0.05) 4px
   );
   pointer-events: none; z-index: 1;
 }
@@ -656,6 +664,9 @@ header::after {
 <body>
 
 <!-- ── LOADING ── -->
+<canvas id="cv"></canvas>
+<div class="neb neb-a"></div>
+<div class="neb neb-b"></div>
 <div id="loading">
   <div style="position:relative">
     <div class="load-logo">ENTRY<span>PLAN</span></div>
@@ -1262,6 +1273,69 @@ async function init(){
     setTimeout(()=>o.style.display='none', 800);
   }, 2200);
 }
+
+// ── STARFIELD ──
+(function(){
+  const cv=document.getElementById('cv');
+  const cx=cv.getContext('2d');
+  let W,H,stars=[];
+
+  const LAYERS=[
+    {f:.30,r:[.25,.50],s:[.003,.008],a:[.10,.32],gold:.015},
+    {f:.45,r:[.40,.85],s:[.010,.022],a:[.20,.58],gold:.025},
+    {f:.25,r:[.70,1.50],s:[.026,.048],a:[.38,.88],gold:.010},
+  ];
+
+  function mk(){
+    W=cv.width=innerWidth; H=cv.height=innerHeight; stars=[];
+    LAYERS.forEach(L=>{
+      const n=Math.round(W*H/3000*L.f*3);
+      for(let i=0;i<n;i++) stars.push({
+        x:Math.random()*W, y:Math.random()*H,
+        r:L.r[0]+Math.random()*(L.r[1]-L.r[0]),
+        a:L.a[0]+Math.random()*(L.a[1]-L.a[0]),
+        sy:(L.s[0]+Math.random()*(L.s[1]-L.s[0]))*(.7+Math.random()*.6),
+        tw:.002+Math.random()*.006, ph:Math.random()*Math.PI*2,
+        warm:Math.random()<L.gold,
+      });
+    });
+  }
+
+  let shots=[];
+  function mayShoot(){
+    if(Math.random()<.003) shots.push({
+      x:Math.random()*W*.75,y:Math.random()*H*.35,
+      vx:7+Math.random()*9,vy:1.5+Math.random()*3.5,a:.9,life:1,
+    });
+  }
+
+  function frame(){
+    cx.clearRect(0,0,W,H);
+    stars.forEach(s=>{
+      s.ph+=s.tw;
+      const t=.5+.5*Math.sin(s.ph);
+      const a=s.a*(.55+.45*t);
+      cx.beginPath(); cx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      cx.fillStyle=s.warm?`rgba(210,225,255,${a})`:`rgba(170,205,255,${a})`;
+      cx.fill();
+      s.y+=s.sy;
+      if(s.y>H+2){s.y=-2;s.x=Math.random()*W;}
+    });
+    mayShoot();
+    shots=shots.filter(s=>s.life>0);
+    shots.forEach(s=>{
+      cx.save(); cx.globalAlpha=s.a*s.life;
+      const g=cx.createLinearGradient(s.x,s.y,s.x-s.vx*4,s.y-s.vy*4);
+      g.addColorStop(0,'rgba(200,225,255,.95)'); g.addColorStop(1,'transparent');
+      cx.strokeStyle=g; cx.lineWidth=1.2;
+      cx.beginPath(); cx.moveTo(s.x,s.y); cx.lineTo(s.x-s.vx*4,s.y-s.vy*4);
+      cx.stroke(); cx.restore();
+      s.x+=s.vx; s.y+=s.vy; s.life-=.022;
+    });
+    requestAnimationFrame(frame);
+  }
+  mk(); frame(); addEventListener('resize',mk);
+})();
 
 init();
 </script>
