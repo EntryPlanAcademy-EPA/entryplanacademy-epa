@@ -126,11 +126,11 @@ header{border-bottom:1px solid var(--border);padding:0 48px;display:flex;align-i
     <div class="hero-total" id="hero-total">$0.00</div>
     <div class="hero-row">
       <div class="hero-stat">
-        <div class="hero-stat-label">กำไรรวมทั้งหมด</div>
+        <div class="hero-stat-label">Total Profit</div>
         <div class="hero-stat-value green" id="h-total-pnl">+$0.00</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-label">กำไรเดือนนี้รวม</div>
+        <div class="hero-stat-label">Monthly Profit</div>
         <div class="hero-stat-value green" id="h-monthly-pnl">+$0.00</div>
       </div>
       <div class="hero-stat">
@@ -156,17 +156,17 @@ header{border-bottom:1px solid var(--border);padding:0 48px;display:flex;align-i
           <div class="ea-status status-live"><span>●</span> LIVE</div>
         </div>
         <div class="ea-card-body">
-          <div class="ea-main-label">กำไรตั้งแต่เริ่มรัน</div>
+          <div class="ea-main-label">Total Profit</div>
           <div class="ea-main-value green" id="ga-total-pnl">—</div>
           <div class="sparkline-wrap"><canvas id="spark-gradea"></canvas></div>
           <div class="ea-stats-row">
-            <div><div class="ea-stat-label">กำไรเดือนนี้</div><div class="ea-stat-value green" id="ga-month-pnl">—</div></div>
+            <div><div class="ea-stat-label">Monthly Profit</div><div class="ea-stat-value green" id="ga-month-pnl">—</div></div>
             <div><div class="ea-stat-label">Win Rate</div><div class="ea-stat-value gold" id="ga-winrate">—</div></div>
             <div><div class="ea-stat-label">Balance</div><div class="ea-stat-value" id="ga-balance">—</div></div>
             <div><div class="ea-stat-label">Growth</div><div class="ea-stat-value gold" id="ga-growth">—</div></div>
           </div>
         </div>
-        <div class="ea-card-footer"><button class="btn-detail">ดูรายละเอียด →</button></div>
+        <div class="ea-card-footer"><button class="btn-detail">View Details →</button></div>
       </div>
 
       <div class="ea-card" onclick="openDetail('blackhole')">
@@ -177,17 +177,17 @@ header{border-bottom:1px solid var(--border);padding:0 48px;display:flex;align-i
           <div class="ea-status status-live"><span>●</span> LIVE</div>
         </div>
         <div class="ea-card-body">
-          <div class="ea-main-label">กำไรตั้งแต่เริ่มรัน</div>
+          <div class="ea-main-label">Total Profit</div>
           <div class="ea-main-value green" id="bh-total-pnl">—</div>
           <div class="sparkline-wrap"><canvas id="spark-blackhole"></canvas></div>
           <div class="ea-stats-row">
-            <div><div class="ea-stat-label">กำไรเดือนนี้</div><div class="ea-stat-value green" id="bh-month-pnl">—</div></div>
+            <div><div class="ea-stat-label">Monthly Profit</div><div class="ea-stat-value green" id="bh-month-pnl">—</div></div>
             <div><div class="ea-stat-label">Win Rate</div><div class="ea-stat-value gold" id="bh-winrate">—</div></div>
             <div><div class="ea-stat-label">Balance</div><div class="ea-stat-value" id="bh-balance">—</div></div>
             <div><div class="ea-stat-label">Growth</div><div class="ea-stat-value gold" id="bh-growth">—</div></div>
           </div>
         </div>
-        <div class="ea-card-footer"><button class="btn-detail">ดูรายละเอียด →</button></div>
+        <div class="ea-card-footer"><button class="btn-detail">View Details →</button></div>
       </div>
 
       <div class="ea-card" onclick="openDetail('bigbang')">
@@ -198,17 +198,17 @@ header{border-bottom:1px solid var(--border);padding:0 48px;display:flex;align-i
           <div class="ea-status status-live"><span>●</span> LIVE</div>
         </div>
         <div class="ea-card-body">
-          <div class="ea-main-label">กำไรตั้งแต่เริ่มรัน</div>
+          <div class="ea-main-label">Total Profit</div>
           <div class="ea-main-value green" id="bb-total-pnl">—</div>
           <div class="sparkline-wrap"><canvas id="spark-bigbang"></canvas></div>
           <div class="ea-stats-row">
-            <div><div class="ea-stat-label">กำไรเดือนนี้</div><div class="ea-stat-value green" id="bb-month-pnl">—</div></div>
+            <div><div class="ea-stat-label">Monthly Profit</div><div class="ea-stat-value green" id="bb-month-pnl">—</div></div>
             <div><div class="ea-stat-label">Win Rate</div><div class="ea-stat-value gold" id="bb-winrate">—</div></div>
             <div><div class="ea-stat-label">Balance</div><div class="ea-stat-value" id="bb-balance">—</div></div>
             <div><div class="ea-stat-label">Growth</div><div class="ea-stat-value gold" id="bb-growth">—</div></div>
           </div>
         </div>
-        <div class="ea-card-footer"><button class="btn-detail">ดูรายละเอียด →</button></div>
+        <div class="ea-card-footer"><button class="btn-detail">View Details →</button></div>
       </div>
 
     </div>
@@ -221,7 +221,7 @@ header{border-bottom:1px solid var(--border);padding:0 48px;display:flex;align-i
 <!-- DETAIL PAGE -->
 <div id="detail-page">
   <div class="detail-header">
-    <button class="btn-back" onclick="closeDetail()">← กลับหน้าหลัก</button>
+    <button class="btn-back" onclick="closeDetail()">← Back</button>
     <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1.5px;" id="d-port-label">—</div>
   </div>
   <div class="detail-content">
@@ -229,13 +229,13 @@ header{border-bottom:1px solid var(--border);padding:0 48px;display:flex;align-i
       <div class="d-hero-name" id="d-name">—</div>
       <div class="d-hero-sub" id="d-sub">—</div>
       <div class="d-balance" id="d-balance">$0.00</div>
-      <div class="d-equity-row">Equity: <span id="d-equity">—</span> &nbsp;·&nbsp; Floating: <span id="d-floating">—</span></div>
+      <div class="d-equity-row">Equity: <span id="d-equity">—</span> &nbsp;·&nbsp; Floating P&L: <span id="d-floating">—</span></div>
     </div>
 
     <div class="d-stats-grid">
-      <div class="d-stat"><div class="d-stat-label">กำไรตั้งแต่เริ่มรัน</div><div class="d-stat-value green" id="d-total-pnl">—</div></div>
-      <div class="d-stat"><div class="d-stat-label">กำไรเดือนนี้</div><div class="d-stat-value green" id="d-month-pnl">—</div></div>
-      <div class="d-stat"><div class="d-stat-label">กำไรวันนี้</div><div class="d-stat-value" id="d-daily-pnl">—</div></div>
+      <div class="d-stat"><div class="d-stat-label">Total Profit</div><div class="d-stat-value green" id="d-total-pnl">—</div></div>
+      <div class="d-stat"><div class="d-stat-label">Monthly Profit</div><div class="d-stat-value green" id="d-month-pnl">—</div></div>
+      <div class="d-stat"><div class="d-stat-label">Daily Profit</div><div class="d-stat-value" id="d-daily-pnl">—</div></div>
       <div class="d-stat"><div class="d-stat-label">Growth</div><div class="d-stat-value gold" id="d-growth">—</div></div>
       <div class="d-stat"><div class="d-stat-label">Win Rate</div><div class="d-stat-value" id="d-winrate">—</div></div>
       <div class="d-stat"><div class="d-stat-label">Profit Factor</div><div class="d-stat-value" id="d-pf">—</div></div>
@@ -245,7 +245,7 @@ header{border-bottom:1px solid var(--border);padding:0 48px;display:flex;align-i
 
     <div class="chart-card">
       <div class="chart-card-header">
-        <div class="chart-card-title">Equity Curve</div>
+        <div class="chart-card-title">Profit Curve</div>
         <div class="chart-range-btns">
           <span onclick="setRange('all')" id="r-all" style="color:var(--accent)">ALL</span>
           <span onclick="setRange('3m')" id="r-3m">3M</span>
@@ -259,9 +259,9 @@ header{border-bottom:1px solid var(--border);padding:0 48px;display:flex;align-i
     <div class="chart-card">
       <div class="chart-card-header"><div class="chart-card-title">P&amp;L Summary</div></div>
       <div class="chart-body">
-        <div class="pnl-row"><div class="pnl-period">กำไรวันนี้</div><div class="pnl-val" id="dp-daily">—</div></div>
-        <div class="pnl-row"><div class="pnl-period">กำไรเดือนนี้</div><div class="pnl-val" id="dp-month">—</div></div>
-        <div class="pnl-row"><div class="pnl-period">กำไรทั้งหมด</div><div class="pnl-val" id="dp-total">—</div></div>
+        <div class="pnl-row"><div class="pnl-period">Daily Profit</div><div class="pnl-val" id="dp-daily">—</div></div>
+        <div class="pnl-row"><div class="pnl-period">Monthly Profit</div><div class="pnl-val" id="dp-month">—</div></div>
+        <div class="pnl-row"><div class="pnl-period">Total Profit</div><div class="pnl-val" id="dp-total">—</div></div>
         <div class="pnl-row"><div class="pnl-period">Total Trades</div><div class="pnl-val" id="dp-trades">—</div></div>
         <div class="pnl-row"><div class="pnl-period">Win / Lose</div><div class="pnl-val" id="dp-winlose">—</div></div>
       </div>
@@ -293,11 +293,12 @@ function fBal(v){return'$'+parseFloat(v||0).toLocaleString('en-US',{minimumFract
 function fPct(v){const s=v>=0?'+':'';return`${s}${parseFloat(v||0).toFixed(2)}%`;}
 function cls(v){return parseFloat(v||0)>=0?'green':'red';}
 
+// Sparkline uses PROFIT column
 function buildSparkline(id,eq,color){
   if(sparkCharts[id])sparkCharts[id].destroy();
   const ctx=document.getElementById(id);
   if(!ctx||!eq||eq.length<2)return;
-  const vals=eq.map(d=>parseFloat(d.equity));
+  const vals=eq.map(d=>parseFloat(d.profit||0));
   const g=ctx.getContext('2d').createLinearGradient(0,0,0,50);
   g.addColorStop(0,color+'44');g.addColorStop(1,color+'00');
   sparkCharts[id]=new Chart(ctx,{type:'line',data:{labels:vals.map((_,i)=>i),datasets:[{data:vals,borderColor:color,backgroundColor:g,borderWidth:1.5,pointRadius:0,fill:true,tension:0.4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});
@@ -328,7 +329,7 @@ function renderHero(){
   document.getElementById('hero-total').textContent=fBal(tb);
   const tEl=document.getElementById('h-total-pnl');tEl.textContent=fUSD(tp);tEl.className='hero-stat-value '+(tp>=0?'green':'red');
   const mEl=document.getElementById('h-monthly-pnl');mEl.textContent=fUSD(tm);mEl.className='hero-stat-value '+(tm>=0?'green':'red');
-  if(lt){const dt=new Date(lt);document.getElementById('h-update').textContent=dt.toLocaleDateString('th-TH')+' '+dt.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});}
+  if(lt){const dt=new Date(lt);document.getElementById('h-update').textContent=dt.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+' '+dt.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}
 }
 
 function openDetail(key){
@@ -368,18 +369,34 @@ function closeDetail(){
   if(detailChart){detailChart.destroy();detailChart=null;}
 }
 
+// Detail chart uses PROFIT column for main line
 function buildDetailChart(eq,color){
   if(detailChart){detailChart.destroy();detailChart=null;}
   const f=filterRange(eq,currentRange);
   if(!f||f.length<2)return;
-  const labels=f.map(d=>{const dt=new Date(d.recorded_at);return dt.toLocaleDateString('th-TH',{day:'2-digit',month:'short'});});
-  const eqV=f.map(d=>parseFloat(d.equity));const balV=f.map(d=>parseFloat(d.balance));
+  const labels=f.map(d=>{const dt=new Date(d.recorded_at);return dt.toLocaleDateString('en-GB',{day:'2-digit',month:'short'});});
+  const profitV=f.map(d=>parseFloat(d.profit||0));
   const ctx=document.getElementById('detailChart').getContext('2d');
-  const g=ctx.createLinearGradient(0,0,0,260);g.addColorStop(0,color+'40');g.addColorStop(1,color+'00');
+  const g=ctx.createLinearGradient(0,0,0,260);
+  g.addColorStop(0,color+'40');g.addColorStop(1,color+'00');
+  // Zero line color
+  const minP=Math.min(...profitV);
   detailChart=new Chart(ctx,{type:'line',data:{labels,datasets:[
-    {label:'Equity',data:eqV,borderColor:color,backgroundColor:g,borderWidth:2,pointRadius:f.length>30?0:3,fill:true,tension:0.4},
-    {label:'Balance',data:balV,borderColor:'rgba(200,168,90,0.5)',backgroundColor:'transparent',borderWidth:1.5,borderDash:[4,4],pointRadius:0,fill:false,tension:0.4}
-  ]},options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},plugins:{legend:{labels:{color:'#556070',font:{family:'DM Mono',size:10},boxWidth:20,padding:14}},tooltip:{backgroundColor:'#0f1318',borderColor:'#1c2330',borderWidth:1,titleColor:'#556070',bodyColor:'#dde3ed',titleFont:{family:'DM Mono',size:10},bodyFont:{family:'DM Mono',size:11},callbacks:{label:c=>`${c.dataset.label}: $${c.parsed.y.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`}}},scales:{x:{grid:{color:'rgba(28,35,48,0.5)'},ticks:{color:'#556070',font:{family:'DM Mono',size:9},maxTicksLimit:8}},y:{grid:{color:'rgba(28,35,48,0.5)'},ticks:{color:'#556070',font:{family:'DM Mono',size:9},callback:v=>'$'+v.toLocaleString('en-US')}}}}});
+    {label:'Profit ($)',data:profitV,borderColor:color,backgroundColor:g,borderWidth:2,pointRadius:f.length>30?0:3,fill:true,tension:0.4}
+  ]},options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},
+    plugins:{
+      legend:{labels:{color:'#556070',font:{family:'DM Mono',size:10},boxWidth:20,padding:14}},
+      tooltip:{backgroundColor:'#0f1318',borderColor:'#1c2330',borderWidth:1,titleColor:'#556070',bodyColor:'#dde3ed',titleFont:{family:'DM Mono',size:10},bodyFont:{family:'DM Mono',size:11},
+        callbacks:{label:c=>`Profit: ${c.parsed.y>=0?'+':''}$${c.parsed.y.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`}
+      }
+    },
+    scales:{
+      x:{grid:{color:'rgba(28,35,48,0.5)'},ticks:{color:'#556070',font:{family:'DM Mono',size:9},maxTicksLimit:8}},
+      y:{grid:{color:'rgba(28,35,48,0.5)'},
+        ticks:{color:'#556070',font:{family:'DM Mono',size:9},callback:v=>(v>=0?'+$':'-$')+Math.abs(v).toLocaleString('en-US')},
+      }
+    }
+  }});
 }
 
 function filterRange(data,range){
