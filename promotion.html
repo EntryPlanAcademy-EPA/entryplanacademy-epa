@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EntryPlan Academy — Systems Online</title>
+<title>EntryPlan Academy — Promotion</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,600;0,700;1,300&family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -928,294 +928,62 @@ header::after {
 </head>
 <body>
 
-<!-- ── LOADING ── -->
 <canvas id="cv"></canvas>
 <canvas id="ship-cv"></canvas>
 <div class="neb neb-a"></div>
 <div class="neb neb-b"></div>
-<div id="loading">
-  <div class="ld-orrery"><div class="ld-core"></div></div>
-  <div class="ld-wordmark">Entry<em>Plan</em></div>
-  <div class="ld-sub">Academy · Systems Online</div>
-  <div class="ld-track"><div class="ld-fill"></div></div>
-  <div class="ld-status">Calibrating data streams&hellip;</div>
-</div>
 
-<!-- ── APP ── -->
-<div id="app">
-
-<!-- HEADER -->
-<header>
-  <div class="logo">
-    <div class="logo-orb"><div class="logo-dot"></div></div>
-    <div class="logo-copy">
-      <div class="logo-main">Entry<em>Plan</em></div>
-      <div class="logo-tag">Academy · Observatory</div>
-    </div>
+<div style="display:block; position:relative; z-index:2; min-height:100vh;">
+  <div class="gen-header">
+    <button class="btn-back" onclick="goBack()">◄ BACK</button>
+    <div style="font-family:'Cormorant',serif;font-size:18px;font-weight:300;letter-spacing:6px;color:var(--text)">PROMOTION</div>
+    <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--text3);letter-spacing:2px">SPECIAL ACCESS</div>
   </div>
-  <div class="header-right">
-    <div class="sys-status"><div class="sys-dot"></div>ALL SYSTEMS ONLINE</div>
-    <div class="hdr-time" id="live-clock">--:--:--</div>
-    <div class="hdr-corner"></div>
-  </div>
-</header>
-
-<!-- ── ABOUT ── -->
-<section class="about-section">
-  <div class="about-bg">EPA</div>
-  <div class="about-inner">
-    <div>
-      <div class="about-eyebrow">Est. 2021 · Thailand</div>
-      <div class="about-name">Entry<em>Plan</em><br>Academy</div>
-      <div class="about-divider"></div>
-      <div class="about-stats">
-        <div>
-          <div class="about-stat-num">500+</div>
-          <div class="about-stat-lbl">นักเรียน</div>
-        </div>
-        <div>
-          <div class="about-stat-num">3+</div>
-          <div class="about-stat-lbl">ปีประสบการณ์</div>
-        </div>
-        <div>
-          <div class="about-stat-num">3</div>
-          <div class="about-stat-lbl">Live EAs</div>
-        </div>
+  <div class="gen-content">
+    <div class="promo-detail-hero">
+      <div class="promo-detail-badge">Limited · Special Access</div>
+      <div class="promo-detail-title">เทรดกับ<em>มืออาชีพ</em><br>สิทธิพิเศษสำหรับสมาชิก</div>
+      <div class="promo-detail-sub">
+        เข้าร่วมโปรแกรม VIP ติดตามสัญญาณเทรดแบบ Real-time จากทีม EntryPlan Academy
+        พร้อม EA ที่พิสูจน์แล้วว่าทำกำไรได้จริง และการ mentorship รายสัปดาห์
       </div>
     </div>
-    <div class="about-body">
-      <p>
-        <strong>EntryPlan Academy</strong> คือสถาบันสอนเทรด Forex และ Gold
-        ที่ก่อตั้งขึ้นด้วยเป้าหมายเดียว — สร้างนักเทรดมืออาชีพที่มีวินัย
-        มีระบบ และสามารถทำกำไรได้อย่างยั่งยืนในระยะยาว
-      </p>
-      <p>
-        เราพัฒนา <strong>Expert Advisor (EA)</strong> ที่ผ่านการทดสอบและรันจริงบนบัญชี Live
-        เพื่อให้นักเรียนเห็นผลลัพธ์จริง ไม่ใช่แค่ Backtest
-        ทุก EA ที่แสดงในหน้านี้คือระบบที่ทีมใช้งานจริงอยู่ในปัจจุบัน
-      </p>
-      <p>
-        หลักสูตรครอบคลุมตั้งแต่ Price Action ขั้นพื้นฐาน
-        จนถึงการเขียน MQL5 เพื่อสร้าง Automated Trading System ของตัวเอง
-        พร้อม mentorship รายสัปดาห์จากโค้ชโดยตรง
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- ── 3 MAIN CARDS ── -->
-<div class="main-grid-wrap">
-  <div class="section-header">
-    <div class="section-title">// Services</div>
-    <div class="section-line"></div>
-    <div class="section-num">[ 3 MODULES ]</div>
-  </div>
-
-  <div class="main-grid">
-
-    <!-- CARD: PROMOTION -->
-    <div class="ea-card gold-card" onclick="window.location.href='promotion.html'" style="cursor:pointer">
-      <div class="corner-tl"></div>
-      <div class="card-accent-bar bar-gold"></div>
-      <div class="card-head">
-        <div>
-          <div class="card-name gold">PROMOTION</div>
-          <div class="card-port">SPECIAL ACCESS // LIMITED</div>
-        </div>
-        <div class="card-live" style="background:rgba(240,180,41,0.1);border-color:rgba(240,180,41,0.3);color:var(--gold)">
-          <div class="card-live-dot" style="background:var(--gold);box-shadow:0 0 4px var(--gold)"></div>OPEN
-        </div>
+    <div class="promo-features-grid">
+      <div class="promo-feat">
+        <div class="promo-feat-title">📡 สัญญาณเทรด Real-time</div>
+        <div class="promo-feat-desc">รับสัญญาณ Gold & Forex ทุกวัน พร้อม entry, TP, SL ที่ชัดเจน</div>
       </div>
-      <div class="card-body">
-        <div class="card-profit-label">// HIGHLIGHT</div>
-        <div class="card-profit-value gold" style="font-size:28px;line-height:1.2">เทรดกับ<br>มืออาชีพ</div>
-        <div class="card-metrics" style="margin-top:16px">
-          <div class="metric">
-            <div class="metric-label">สัญญาณเทรด</div>
-            <div class="metric-value gold">Real-time</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Mentorship</div>
-            <div class="metric-value gold">1-on-1</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">EA Access</div>
-            <div class="metric-value gold">Full</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Community</div>
-            <div class="metric-value gold">Pro</div>
-          </div>
-        </div>
+      <div class="promo-feat">
+        <div class="promo-feat-title">🤖 เข้าถึง EA ทุกตัว</div>
+        <div class="promo-feat-desc">ใช้งาน EA ทุกระบบในพอร์ตจริงของทีม พร้อม setup guide</div>
       </div>
-      <div class="card-foot">
-        <button class="btn-view">ดูรายละเอียด <span class="btn-view-arr">→</span></button>
+      <div class="promo-feat">
+        <div class="promo-feat-title">👤 Mentorship 1-on-1</div>
+        <div class="promo-feat-desc">พบโค้ชรายสัปดาห์ วิเคราะห์พอร์ตและปรับกลยุทธ์ส่วนตัว</div>
+      </div>
+      <div class="promo-feat">
+        <div class="promo-feat-title">👥 Pro Community</div>
+        <div class="promo-feat-desc">เข้าร่วม community นักเทรดระดับ Pro แชร์ไอเดียและข่าวตลาด</div>
       </div>
     </div>
-
-    <!-- CARD: COACH -->
-    <div class="ea-card cyan-card" onclick="window.location.href='coach.html'" style="cursor:pointer">
-      <div class="corner-tl"></div>
-      <div class="card-accent-bar bar-cyan"></div>
-      <div class="card-head">
-        <div>
-          <div class="card-name cyan">HEAD COACH</div>
-          <div class="card-port">FOUNDER // LEAD STRATEGIST</div>
-        </div>
-        <div class="card-live"><div class="card-live-dot"></div>ACTIVE</div>
-      </div>
-      <div class="card-body">
-        <div class="card-profit-label">// INSTRUCTOR</div>
-        <div class="card-profit-value cyan" style="font-size:28px">Coach Nhum</div>
-        <div class="card-metrics" style="margin-top:16px">
-          <div class="metric">
-            <div class="metric-label">ประสบการณ์</div>
-            <div class="metric-value cyan">3+ ปี</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Specialty</div>
-            <div class="metric-value cyan">XAUUSD</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">นักเรียน</div>
-            <div class="metric-value cyan">500+</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Live EAs</div>
-            <div class="metric-value cyan">3 ระบบ</div>
-          </div>
-        </div>
-      </div>
-      <div class="card-foot">
-        <button class="btn-view">ดูโปรไฟล์ <span class="btn-view-arr">→</span></button>
-      </div>
+    <div class="promo-cta-wrap">
+      <button class="promo-cta-btn">สมัครเข้าร่วมเลย →</button>
     </div>
-
-    <!-- CARD: EA PORTFOLIO -->
-    <div class="ea-card purple-card" onclick="window.location.href='portfolio.html'" style="cursor:pointer">
-      <div class="corner-tl"></div>
-      <div class="card-accent-bar bar-purple"></div>
-      <div class="card-head">
-        <div>
-          <div class="card-name purple">EA PORTFOLIO</div>
-          <div class="card-port">LIVE SYSTEMS // XAUUSD</div>
-        </div>
-        <div class="card-live"><div class="card-live-dot"></div>LIVE</div>
-      </div>
-      <div class="card-body">
-        <div class="card-profit-label">// COMBINED PROFIT</div>
-        <div class="card-profit-value green" id="main-total-pnl">—</div>
-        <div class="card-metrics" style="margin-top:16px">
-          <div class="metric">
-            <div class="metric-label">Active EAs</div>
-            <div class="metric-value" style="color:var(--purple)">03</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Monthly</div>
-            <div class="metric-value green" id="main-month-pnl">—</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Portfolios</div>
-            <div class="metric-value" style="color:var(--purple)">3/3</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Status</div>
-            <div class="metric-value green">ONLINE</div>
-          </div>
-        </div>
-      </div>
-      <div class="card-foot">
-        <button class="btn-view">ดู EA ทั้งหมด <span class="btn-view-arr">→</span></button>
-      </div>
-    </div>
-
   </div>
 </div>
-
-</div><!-- app -->
-
-
-</div><!-- app -->
 
 <script>
-const SUPA_URL = 'https://stdvqepkkkeehojstfww.supabase.co';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0ZHZxZXBra2tlZWhvanN0Znd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyNTE5MjMsImV4cCI6MjA4NzgyNzkyM30.g25XS-O44n-Nf01-pRKy3pBH4OpYwQ7nbia67vHtx04';
-
-const EA_CONFIG = {
-  gradea:   { name:'GRADE A',   port:'501412', prefix:'ga', color:'#f0b429', nameClass:'gold'   },
-  blackhole:{ name:'BLACKHOLE', port:'501425', prefix:'bh', color:'#00d4ff', nameClass:'cyan'   },
-  bigbang:  { name:'BIGBANG',   port:'501427', prefix:'bb', color:'#8b5cf6', nameClass:'purple' },
-};
-
-let allData = {};
-
 // ── CLOCK ──
 function updateClock(){
-  const now = new Date();
-  document.getElementById('live-clock').textContent =
-    now.toLocaleTimeString('en-GB',{hour12:false}) + ' UTC+7';
+  const el = document.getElementById('live-clock');
+  if(el) el.textContent = new Date().toLocaleTimeString('en-GB',{hour12:false}) + ' UTC+7';
 }
 setInterval(updateClock, 1000);
 updateClock();
 
-// ── FETCH ──
-async function fetchSupa(table, query=''){
-  try{
-    const r = await fetch(`${SUPA_URL}/rest/v1/${table}?${query}`,{
-      headers:{'apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`}
-    });
-    return r.ok ? r.json() : [];
-  }catch(e){ return []; }
-}
-
-// ── FORMAT ──
-function fUSD(v){
-  if(v===null||v===undefined)return'—';
-  const s=v>=0?'+':'-';
-  return`${s}$${Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
-}
-
-// ── RENDER MAIN EA PORTFOLIO CARD ──
-function renderMainCards(){
-  let tp=0, tm=0;
-  Object.keys(allData).forEach(k=>{
-    const d = allData[k]&&allData[k].length>0 ? allData[k][0] : null;
-    if(!d) return;
-    tp += parseFloat(d.total_pnl||0);
-    tm += parseFloat(d.monthly_pnl||0);
-  });
-  const tEl = document.getElementById('main-total-pnl');
-  if(tEl){ tEl.textContent=fUSD(tp); tEl.className='card-profit-value '+(tp>=0?'green':'red'); }
-  const mEl = document.getElementById('main-month-pnl');
-  if(mEl){ mEl.textContent=fUSD(tm); mEl.className='metric-value '+(tm>=0?'green':'red'); }
-}
-
-// ── INIT ──
-async function init(){
-  // ถ้ากลับมาจากหน้าย่อยใดก็ตาม ให้ข้าม loading screen ทันที
-  const fromSub = sessionStorage.getItem('fromPortfolio') ||
-                  sessionStorage.getItem('fromPromo') ||
-                  sessionStorage.getItem('fromCoach');
-  if(fromSub){
-    sessionStorage.removeItem('fromPortfolio');
-    sessionStorage.removeItem('fromPromo');
-    sessionStorage.removeItem('fromCoach');
-    document.getElementById('loading').style.display = 'none';
-  }
-
-  await Promise.all(Object.keys(EA_CONFIG).map(async key=>{
-    const stats = await fetchSupa(`${key}_daily_stats`, 'order=recorded_at.desc&limit=1');
-    allData[key] = stats;
-  }));
-  renderMainCards();
-
-  if(!fromSub){
-    setTimeout(()=>{
-      const o = document.getElementById('loading');
-      o.style.opacity='0';
-      setTimeout(()=>o.style.display='none', 1400);
-    }, 2800);
-  }
+function goBack(){
+  sessionStorage.setItem('fromPromo', '1');
+  window.location.href = 'index.html';
 }
 
 // ── STARFIELD ──
@@ -1553,6 +1321,7 @@ async function init(){
 init();
 
 init();
+
 </script>
 </body>
 </html>

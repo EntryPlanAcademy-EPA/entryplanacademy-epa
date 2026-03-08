@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EntryPlan Academy — Systems Online</title>
+<title>EntryPlan Academy — EA Portfolio</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,600;0,700;1,300&family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -928,216 +928,242 @@ header::after {
 </head>
 <body>
 
-<!-- ── LOADING ── -->
 <canvas id="cv"></canvas>
 <canvas id="ship-cv"></canvas>
 <div class="neb neb-a"></div>
 <div class="neb neb-b"></div>
-<div id="loading">
-  <div class="ld-orrery"><div class="ld-core"></div></div>
-  <div class="ld-wordmark">Entry<em>Plan</em></div>
-  <div class="ld-sub">Academy · Systems Online</div>
-  <div class="ld-track"><div class="ld-fill"></div></div>
-  <div class="ld-status">Calibrating data streams&hellip;</div>
-</div>
 
-<!-- ── APP ── -->
-<div id="app">
-
-<!-- HEADER -->
-<header>
-  <div class="logo">
-    <div class="logo-orb"><div class="logo-dot"></div></div>
-    <div class="logo-copy">
-      <div class="logo-main">Entry<em>Plan</em></div>
-      <div class="logo-tag">Academy · Observatory</div>
-    </div>
-  </div>
-  <div class="header-right">
-    <div class="sys-status"><div class="sys-dot"></div>ALL SYSTEMS ONLINE</div>
-    <div class="hdr-time" id="live-clock">--:--:--</div>
-    <div class="hdr-corner"></div>
-  </div>
-</header>
-
-<!-- ── ABOUT ── -->
-<section class="about-section">
-  <div class="about-bg">EPA</div>
-  <div class="about-inner">
-    <div>
-      <div class="about-eyebrow">Est. 2021 · Thailand</div>
-      <div class="about-name">Entry<em>Plan</em><br>Academy</div>
-      <div class="about-divider"></div>
-      <div class="about-stats">
-        <div>
-          <div class="about-stat-num">500+</div>
-          <div class="about-stat-lbl">นักเรียน</div>
-        </div>
-        <div>
-          <div class="about-stat-num">3+</div>
-          <div class="about-stat-lbl">ปีประสบการณ์</div>
-        </div>
-        <div>
-          <div class="about-stat-num">3</div>
-          <div class="about-stat-lbl">Live EAs</div>
-        </div>
-      </div>
-    </div>
-    <div class="about-body">
-      <p>
-        <strong>EntryPlan Academy</strong> คือสถาบันสอนเทรด Forex และ Gold
-        ที่ก่อตั้งขึ้นด้วยเป้าหมายเดียว — สร้างนักเทรดมืออาชีพที่มีวินัย
-        มีระบบ และสามารถทำกำไรได้อย่างยั่งยืนในระยะยาว
-      </p>
-      <p>
-        เราพัฒนา <strong>Expert Advisor (EA)</strong> ที่ผ่านการทดสอบและรันจริงบนบัญชี Live
-        เพื่อให้นักเรียนเห็นผลลัพธ์จริง ไม่ใช่แค่ Backtest
-        ทุก EA ที่แสดงในหน้านี้คือระบบที่ทีมใช้งานจริงอยู่ในปัจจุบัน
-      </p>
-      <p>
-        หลักสูตรครอบคลุมตั้งแต่ Price Action ขั้นพื้นฐาน
-        จนถึงการเขียน MQL5 เพื่อสร้าง Automated Trading System ของตัวเอง
-        พร้อม mentorship รายสัปดาห์จากโค้ชโดยตรง
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- ── 3 MAIN CARDS ── -->
-<div class="main-grid-wrap">
-  <div class="section-header">
-    <div class="section-title">// Services</div>
-    <div class="section-line"></div>
-    <div class="section-num">[ 3 MODULES ]</div>
+<!-- ── EA PORTFOLIO PAGE ── -->
+<div id="portfolio-page" style="display:block; position:relative; z-index:2; min-height:100vh;">
+  <div class="gen-header">
+    <button class="btn-back" onclick="closePage('portfolio-page')">◄ BACK</button>
+    <div style="font-family:'Cormorant',serif;font-size:18px;font-weight:300;letter-spacing:6px;color:var(--text)">EA PORTFOLIO</div>
+    <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--text3);letter-spacing:2px">LIVE SYSTEMS</div>
   </div>
 
-  <div class="main-grid">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg-text">EPA</div>
+    <div class="hero-top">COMBINED PORTFOLIO BALANCE</div>
+    <div class="hero-balance" id="hero-total">$0.00</div>
+    <div class="hero-balance-label">TOTAL ASSETS UNDER MANAGEMENT · 3 ACTIVE PORTFOLIOS</div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hs-label">Total Profit</div>
+        <div class="hs-value green" id="h-total-pnl">+$0.00</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hs-label">Monthly Profit</div>
+        <div class="hs-value green" id="h-monthly-pnl">+$0.00</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hs-label">Active EAs</div>
+        <div class="hs-value gold">03</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hs-label">Last Sync</div>
+        <div class="hs-value dim" id="h-update">—</div>
+      </div>
+    </div>
+  </section>
 
-    <!-- CARD: PROMOTION -->
-    <div class="ea-card gold-card" onclick="window.location.href='promotion.html'" style="cursor:pointer">
-      <div class="corner-tl"></div>
-      <div class="card-accent-bar bar-gold"></div>
-      <div class="card-head">
-        <div>
-          <div class="card-name gold">PROMOTION</div>
-          <div class="card-port">SPECIAL ACCESS // LIMITED</div>
+  <!-- EA CARDS -->
+  <div class="main">
+    <div class="section-header">
+      <div class="section-title">// Portfolio Nodes</div>
+      <div class="section-line"></div>
+      <div class="section-num">[ 3 / 3 ONLINE ]</div>
+    </div>
+    <div class="ea-grid">
+
+      <!-- GRADE A -->
+      <div class="ea-card gold-card" onclick="openDetail('gradea')">
+        <div class="corner-tl"></div>
+        <div class="card-accent-bar bar-gold"></div>
+        <div class="card-head">
+          <div><div class="card-name gold">GRADE A</div><div class="card-port">PORT #501412 // XAUUSD</div></div>
+          <div class="card-live"><div class="card-live-dot"></div>LIVE</div>
         </div>
-        <div class="card-live" style="background:rgba(240,180,41,0.1);border-color:rgba(240,180,41,0.3);color:var(--gold)">
-          <div class="card-live-dot" style="background:var(--gold);box-shadow:0 0 4px var(--gold)"></div>OPEN
+        <div class="card-body">
+          <div class="card-profit-label">// TOTAL PROFIT</div>
+          <div class="card-profit-value green" id="ga-total-pnl">—</div>
+          <div class="spark-wrap"><div class="spark-zero-line"></div><canvas id="spark-gradea"></canvas></div>
+          <div class="card-metrics">
+            <div class="metric"><div class="metric-label">Monthly</div><div class="metric-value green" id="ga-month-pnl">—</div></div>
+            <div class="metric"><div class="metric-label">Win Rate</div><div class="metric-value gold" id="ga-winrate">—</div></div>
+            <div class="metric"><div class="metric-label">Balance</div><div class="metric-value dim" id="ga-balance">—</div></div>
+            <div class="metric"><div class="metric-label">Growth</div><div class="metric-value gold" id="ga-growth">—</div></div>
+          </div>
+        </div>
+        <div class="card-foot"><button class="btn-view">ACCESS NODE <span class="btn-view-arr">→</span></button></div>
+      </div>
+
+      <!-- BLACKHOLE -->
+      <div class="ea-card cyan-card" onclick="openDetail('blackhole')">
+        <div class="corner-tl"></div>
+        <div class="card-accent-bar bar-cyan"></div>
+        <div class="card-head">
+          <div><div class="card-name cyan">BLACKHOLE</div><div class="card-port">PORT #501425 // XAUUSD</div></div>
+          <div class="card-live"><div class="card-live-dot"></div>LIVE</div>
+        </div>
+        <div class="card-body">
+          <div class="card-profit-label">// TOTAL PROFIT</div>
+          <div class="card-profit-value green" id="bh-total-pnl">—</div>
+          <div class="spark-wrap"><div class="spark-zero-line"></div><canvas id="spark-blackhole"></canvas></div>
+          <div class="card-metrics">
+            <div class="metric"><div class="metric-label">Monthly</div><div class="metric-value green" id="bh-month-pnl">—</div></div>
+            <div class="metric"><div class="metric-label">Win Rate</div><div class="metric-value gold" id="bh-winrate">—</div></div>
+            <div class="metric"><div class="metric-label">Balance</div><div class="metric-value dim" id="bh-balance">—</div></div>
+            <div class="metric"><div class="metric-label">Growth</div><div class="metric-value gold" id="bh-growth">—</div></div>
+          </div>
+        </div>
+        <div class="card-foot"><button class="btn-view">ACCESS NODE <span class="btn-view-arr">→</span></button></div>
+      </div>
+
+      <!-- BIGBANG -->
+      <div class="ea-card purple-card" onclick="openDetail('bigbang')">
+        <div class="corner-tl"></div>
+        <div class="card-accent-bar bar-purple"></div>
+        <div class="card-head">
+          <div><div class="card-name purple">BIGBANG</div><div class="card-port">PORT #501427 // XAUUSD</div></div>
+          <div class="card-live"><div class="card-live-dot"></div>LIVE</div>
+        </div>
+        <div class="card-body">
+          <div class="card-profit-label">// TOTAL PROFIT</div>
+          <div class="card-profit-value green" id="bb-total-pnl">—</div>
+          <div class="spark-wrap"><div class="spark-zero-line"></div><canvas id="spark-bigbang"></canvas></div>
+          <div class="card-metrics">
+            <div class="metric"><div class="metric-label">Monthly</div><div class="metric-value green" id="bb-month-pnl">—</div></div>
+            <div class="metric"><div class="metric-label">Win Rate</div><div class="metric-value gold" id="bb-winrate">—</div></div>
+            <div class="metric"><div class="metric-label">Balance</div><div class="metric-value dim" id="bb-balance">—</div></div>
+            <div class="metric"><div class="metric-label">Growth</div><div class="metric-value gold" id="bb-growth">—</div></div>
+          </div>
+        </div>
+        <div class="card-foot"><button class="btn-view">ACCESS NODE <span class="btn-view-arr">→</span></button></div>
+      </div>
+
+    </div>
+    <div class="page-footer">
+      PAST PERFORMANCE IS NOT INDICATIVE OF FUTURE RESULTS // TRADING INVOLVES SUBSTANTIAL RISK<br>
+      © 2025 ENTRYPLAN ACADEMY // ALL RIGHTS RESERVED
+    </div>
+  </div>
+</div><!-- portfolio-page -->
+
+<!-- ── DETAIL PAGE ── -->
+<div id="detail-page">
+  <div class="d-header">
+    <button class="btn-back" onclick="closeDetail()">◄ BACK</button>
+    <div class="d-header-title" id="d-header-label">—</div>
+    <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--text3);letter-spacing:2px" id="d-port-label">—</div>
+  </div>
+
+  <div class="d-content">
+
+    <!-- D HERO -->
+    <div class="d-hero">
+      <div class="d-hero-left">
+        <div class="d-ea-name gold" id="d-name">—</div>
+        <div class="d-ea-sub" id="d-sub">—</div>
+        <div class="d-balance" id="d-balance">$0.00</div>
+        <div class="d-balance-sub">
+          EQUITY: <span id="d-equity">—</span> &nbsp;//&nbsp; FLOATING P&amp;L: <span id="d-floating">—</span>
         </div>
       </div>
-      <div class="card-body">
-        <div class="card-profit-label">// HIGHLIGHT</div>
-        <div class="card-profit-value gold" style="font-size:28px;line-height:1.2">เทรดกับ<br>มืออาชีพ</div>
-        <div class="card-metrics" style="margin-top:16px">
-          <div class="metric">
-            <div class="metric-label">สัญญาณเทรด</div>
-            <div class="metric-value gold">Real-time</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Mentorship</div>
-            <div class="metric-value gold">1-on-1</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">EA Access</div>
-            <div class="metric-value gold">Full</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Community</div>
-            <div class="metric-value gold">Pro</div>
-          </div>
-        </div>
-      </div>
-      <div class="card-foot">
-        <button class="btn-view">ดูรายละเอียด <span class="btn-view-arr">→</span></button>
+      <div class="d-hero-right">
+        <div class="d-profit-label">// TOTAL PROFIT</div>
+        <div class="d-profit-big green" id="d-profit-big">—</div>
       </div>
     </div>
 
-    <!-- CARD: COACH -->
-    <div class="ea-card cyan-card" onclick="window.location.href='coach.html'" style="cursor:pointer">
-      <div class="corner-tl"></div>
-      <div class="card-accent-bar bar-cyan"></div>
-      <div class="card-head">
-        <div>
-          <div class="card-name cyan">HEAD COACH</div>
-          <div class="card-port">FOUNDER // LEAD STRATEGIST</div>
-        </div>
-        <div class="card-live"><div class="card-live-dot"></div>ACTIVE</div>
+    <!-- STATS GRID -->
+    <div class="d-stats-grid" style="margin-bottom:24px">
+      <div class="d-stat accent-green">
+        <div class="ds-label">Total Profit</div>
+        <div class="ds-value green" id="d-total-pnl">—</div>
       </div>
-      <div class="card-body">
-        <div class="card-profit-label">// INSTRUCTOR</div>
-        <div class="card-profit-value cyan" style="font-size:28px">Coach Nhum</div>
-        <div class="card-metrics" style="margin-top:16px">
-          <div class="metric">
-            <div class="metric-label">ประสบการณ์</div>
-            <div class="metric-value cyan">3+ ปี</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Specialty</div>
-            <div class="metric-value cyan">XAUUSD</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">นักเรียน</div>
-            <div class="metric-value cyan">500+</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Live EAs</div>
-            <div class="metric-value cyan">3 ระบบ</div>
-          </div>
-        </div>
+      <div class="d-stat accent-green">
+        <div class="ds-label">Monthly Profit</div>
+        <div class="ds-value green" id="d-month-pnl">—</div>
       </div>
-      <div class="card-foot">
-        <button class="btn-view">ดูโปรไฟล์ <span class="btn-view-arr">→</span></button>
+      <div class="d-stat accent-cyan">
+        <div class="ds-label">Daily Profit</div>
+        <div class="ds-value cyan" id="d-daily-pnl">—</div>
+      </div>
+      <div class="d-stat accent-gold">
+        <div class="ds-label">Growth</div>
+        <div class="ds-value gold" id="d-growth">—</div>
+      </div>
+      <div class="d-stat accent-gold">
+        <div class="ds-label">Win Rate</div>
+        <div class="ds-value gold" id="d-winrate">—</div>
+      </div>
+      <div class="d-stat accent-cyan">
+        <div class="ds-label">Profit Factor</div>
+        <div class="ds-value cyan" id="d-pf">—</div>
+      </div>
+      <div class="d-stat accent-red">
+        <div class="ds-label">Max Drawdown</div>
+        <div class="ds-value red" id="d-dd">—</div>
+      </div>
+      <div class="d-stat accent-gold">
+        <div class="ds-label">Open Orders</div>
+        <div class="ds-value gold" id="d-open">—</div>
       </div>
     </div>
 
-    <!-- CARD: EA PORTFOLIO -->
-    <div class="ea-card purple-card" onclick="window.location.href='portfolio.html'" style="cursor:pointer">
-      <div class="corner-tl"></div>
-      <div class="card-accent-bar bar-purple"></div>
-      <div class="card-head">
-        <div>
-          <div class="card-name purple">EA PORTFOLIO</div>
-          <div class="card-port">LIVE SYSTEMS // XAUUSD</div>
-        </div>
-        <div class="card-live"><div class="card-live-dot"></div>LIVE</div>
-      </div>
-      <div class="card-body">
-        <div class="card-profit-label">// COMBINED PROFIT</div>
-        <div class="card-profit-value green" id="main-total-pnl">—</div>
-        <div class="card-metrics" style="margin-top:16px">
-          <div class="metric">
-            <div class="metric-label">Active EAs</div>
-            <div class="metric-value" style="color:var(--purple)">03</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Monthly</div>
-            <div class="metric-value green" id="main-month-pnl">—</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Portfolios</div>
-            <div class="metric-value" style="color:var(--purple)">3/3</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Status</div>
-            <div class="metric-value green">ONLINE</div>
-          </div>
+    <!-- PROFIT CURVE -->
+    <div class="d-panel">
+      <div class="d-panel-header">
+        <div class="d-panel-title">PROFIT CURVE</div>
+        <div class="range-btns">
+          <button class="range-btn active" id="r-all" onclick="setRange('all')">ALL</button>
+          <button class="range-btn" id="r-3m" onclick="setRange('3m')">3M</button>
+          <button class="range-btn" id="r-1m" onclick="setRange('1m')">1M</button>
+          <button class="range-btn" id="r-1w" onclick="setRange('1w')">1W</button>
         </div>
       </div>
-      <div class="card-foot">
-        <button class="btn-view">ดู EA ทั้งหมด <span class="btn-view-arr">→</span></button>
+      <div class="d-panel-body">
+        <div class="chart-wrap"><canvas id="detailChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- PNL SUMMARY -->
+    <div class="d-panel">
+      <div class="d-panel-header">
+        <div class="d-panel-title">P&amp;L BREAKDOWN</div>
+      </div>
+      <div class="d-panel-body">
+        <div class="pnl-table">
+          <div class="pnl-tr">
+            <div class="pnl-td-label">Daily Profit</div>
+            <div class="pnl-td-value green" id="dp-daily">—</div>
+          </div>
+          <div class="pnl-tr">
+            <div class="pnl-td-label">Monthly Profit</div>
+            <div class="pnl-td-value green" id="dp-month">—</div>
+          </div>
+          <div class="pnl-tr">
+            <div class="pnl-td-label">Total Profit (All Time)</div>
+            <div class="pnl-td-value green" id="dp-total">—</div>
+          </div>
+          <div class="pnl-tr">
+            <div class="pnl-td-label">Total Trades</div>
+            <div class="pnl-td-value dim" id="dp-trades">—</div>
+          </div>
+          <div class="pnl-tr">
+            <div class="pnl-td-label">Win / Lose Split</div>
+            <div class="pnl-td-value dim" id="dp-winlose">—</div>
+          </div>
+        </div>
       </div>
     </div>
 
   </div>
-</div>
-
-</div><!-- app -->
-
-
-</div><!-- app -->
+</div><!-- detail-page -->
 
 <script>
+// ── CONFIG ──
 const SUPA_URL = 'https://stdvqepkkkeehojstfww.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0ZHZxZXBra2tlZWhvanN0Znd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyNTE5MjMsImV4cCI6MjA4NzgyNzkyM30.g25XS-O44n-Nf01-pRKy3pBH4OpYwQ7nbia67vHtx04';
 
@@ -1147,13 +1173,13 @@ const EA_CONFIG = {
   bigbang:  { name:'BIGBANG',   port:'501427', prefix:'bb', color:'#8b5cf6', nameClass:'purple' },
 };
 
-let allData = {};
+let allData={}, allEquity={}, detailChart=null, currentEA=null, currentRange='all', sparkCharts={};
 
 // ── CLOCK ──
 function updateClock(){
   const now = new Date();
-  document.getElementById('live-clock').textContent =
-    now.toLocaleTimeString('en-GB',{hour12:false}) + ' UTC+7';
+  const el = document.getElementById('live-clock');
+  if(el) el.textContent = now.toLocaleTimeString('en-GB',{hour12:false}) + ' UTC+7';
 }
 setInterval(updateClock, 1000);
 updateClock();
@@ -1174,8 +1200,33 @@ function fUSD(v){
   const s=v>=0?'+':'-';
   return`${s}$${Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
 }
+function fBal(v){ return '$'+parseFloat(v||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function fPct(v){ return (v>=0?'+':'')+parseFloat(v||0).toFixed(2)+'%'; }
+function cls(v){ return parseFloat(v||0)>=0?'green':'red'; }
 
-// ── RENDER MAIN EA PORTFOLIO CARD ──
+// ── SPARKLINE ──
+function buildSparkline(id, eq, color){
+  if(sparkCharts[id]) sparkCharts[id].destroy();
+  const ctx = document.getElementById(id);
+  if(!ctx||!eq||eq.length<2) return;
+  const vals = eq.map(d=>parseFloat(d.profit||0));
+  const g = ctx.getContext('2d').createLinearGradient(0,0,0,44);
+  g.addColorStop(0, color+'50'); g.addColorStop(1, color+'00');
+  sparkCharts[id] = new Chart(ctx,{
+    type:'line',
+    data:{ labels:vals.map((_,i)=>i), datasets:[{
+      data:vals, borderColor:color, backgroundColor:g,
+      borderWidth:1.5, pointRadius:0, fill:true, tension:0.4
+    }]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{enabled:false}},
+      scales:{x:{display:false},y:{display:false}},
+      animation:{duration:1000}
+    }
+  });
+}
+
+// ── RENDER MAIN CARDS (home page EA card summary) ──
 function renderMainCards(){
   let tp=0, tm=0;
   Object.keys(allData).forEach(k=>{
@@ -1190,32 +1241,241 @@ function renderMainCards(){
   if(mEl){ mEl.textContent=fUSD(tm); mEl.className='metric-value '+(tm>=0?'green':'red'); }
 }
 
+// ── RENDER CARD ──
+function renderCard(key, stats, eq){
+  const p = EA_CONFIG[key].prefix;
+  const d = stats&&stats.length>0 ? stats[0] : null;
+  if(!d) return;
+
+  const tEl = document.getElementById(`${p}-total-pnl`);
+  tEl.textContent = fUSD(d.total_pnl||0);
+  tEl.className = `card-profit-value ${cls(d.total_pnl||0)}`;
+
+  const mEl = document.getElementById(`${p}-month-pnl`);
+  mEl.textContent = fUSD(d.monthly_pnl||0);
+  mEl.className = `metric-value ${cls(d.monthly_pnl||0)}`;
+
+  document.getElementById(`${p}-winrate`).textContent = (d.win_rate||0).toFixed(1)+'%';
+  document.getElementById(`${p}-balance`).textContent = fBal(d.balance);
+
+  const gEl = document.getElementById(`${p}-growth`);
+  gEl.textContent = fPct(d.growth_percent||0);
+  gEl.className = `metric-value ${(d.growth_percent||0)>=0?'gold':'red'}`;
+
+  buildSparkline(`spark-${key}`, eq, EA_CONFIG[key].color);
+}
+
+// ── RENDER HERO ──
+function renderHero(){
+  let tb=0, tp=0, tm=0, lt=null;
+  Object.keys(allData).forEach(k=>{
+    const d = allData[k]&&allData[k].length>0 ? allData[k][0] : null;
+    if(!d) return;
+    tb += parseFloat(d.balance||0);
+    tp += parseFloat(d.total_pnl||0);
+    tm += parseFloat(d.monthly_pnl||0);
+    if(!lt||new Date(d.recorded_at)>new Date(lt)) lt=d.recorded_at;
+  });
+
+  document.getElementById('hero-total').textContent = fBal(tb);
+
+  const tEl=document.getElementById('h-total-pnl');
+  tEl.textContent=fUSD(tp); tEl.className='hs-value '+(tp>=0?'green':'red');
+
+  const mEl=document.getElementById('h-monthly-pnl');
+  mEl.textContent=fUSD(tm); mEl.className='hs-value '+(tm>=0?'green':'red');
+
+  if(lt){
+    const dt=new Date(lt);
+    document.getElementById('h-update').textContent =
+      dt.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+' '+
+      dt.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  }
+}
+
+// ── PAGE NAVIGATION ──
+function openPage(id){
+  document.getElementById('app').style.display = 'none';
+  document.getElementById(id).style.display = 'block';
+  window.scrollTo(0,0);
+}
+function closePage(id){
+  sessionStorage.setItem('fromPortfolio', '1');
+  window.location.href = 'index.html';
+}
+
+// ── OPEN DETAIL ──
+function openDetail(key){
+  currentEA=key; currentRange='all';
+  const cfg = EA_CONFIG[key];
+  const d = allData[key]&&allData[key].length>0 ? allData[key][0] : null;
+  const eq = allEquity[key]||[];
+
+  document.getElementById('d-header-label').textContent = cfg.name+' // NODE DETAILS';
+  document.getElementById('d-port-label').textContent = 'PORT #'+cfg.port;
+  document.getElementById('d-name').textContent = cfg.name;
+  document.getElementById('d-name').className = 'd-ea-name '+cfg.nameClass;
+  document.getElementById('d-sub').textContent = 'PORT #'+cfg.port+' // XAUUSD // LIVE';
+
+  if(d){
+    document.getElementById('d-balance').textContent = fBal(d.balance);
+    document.getElementById('d-equity').textContent  = fBal(d.equity);
+
+    const fEl=document.getElementById('d-floating');
+    fEl.textContent=fUSD(d.floating_pnl||0);
+    fEl.style.color=(d.floating_pnl||0)>=0?'var(--green)':'var(--red)';
+
+    const bigProfit = document.getElementById('d-profit-big');
+    bigProfit.textContent = fUSD(d.total_pnl||0);
+    bigProfit.className = 'd-profit-big '+(d.total_pnl>=0?'green':'red');
+
+    const set=(id,val,cls)=>{ const el=document.getElementById(id); el.textContent=val; if(cls)el.className='ds-value '+cls; };
+    set('d-total-pnl', fUSD(d.total_pnl||0),  d.total_pnl>=0?'green':'red');
+    set('d-month-pnl', fUSD(d.monthly_pnl||0), d.monthly_pnl>=0?'green':'red');
+    set('d-daily-pnl', fUSD(d.daily_pnl||0),   d.daily_pnl>=0?'cyan':'red');
+    set('d-growth',    fPct(d.growth_percent||0), d.growth_percent>=0?'gold':'red');
+    set('d-winrate',   (d.win_rate||0).toFixed(1)+'%', 'gold');
+    set('d-pf',        (d.profit_factor||0).toFixed(2), 'cyan');
+    set('d-dd',        (d.drawdown_percent||0).toFixed(2)+'%', 'red');
+    set('d-open',      d.open_orders||0, 'gold');
+
+    const pnlSet=(id,val)=>{ const el=document.getElementById(id); el.textContent=fUSD(val); el.className='pnl-td-value '+(val>=0?'green':'red'); };
+    pnlSet('dp-daily',  d.daily_pnl||0);
+    pnlSet('dp-month',  d.monthly_pnl||0);
+    pnlSet('dp-total',  d.total_pnl||0);
+    document.getElementById('dp-trades').textContent = d.total_trades||0;
+    document.getElementById('dp-winlose').textContent = `${d.winning_trades||0} W / ${d.losing_trades||0} L`;
+  }
+
+  // Range buttons reset
+  ['all','3m','1m','1w'].forEach(r=>{
+    document.getElementById('r-'+r).className = r==='all'?'range-btn active':'range-btn';
+  });
+
+  buildDetailChart(eq, cfg.color);
+  document.getElementById('portfolio-page').style.visibility = 'hidden';
+  document.getElementById('detail-page').style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+function closeDetail(){
+  document.getElementById('detail-page').style.display = 'none';
+  document.getElementById('portfolio-page').style.visibility = 'visible';
+  if(detailChart){ detailChart.destroy(); detailChart=null; }
+  window.scrollTo(0,0);
+}
+
+// ── DETAIL CHART ──
+function buildDetailChart(eq, color){
+  if(detailChart){ detailChart.destroy(); detailChart=null; }
+  const f = filterRange(eq, currentRange);
+  if(!f||f.length<2) return;
+
+  const labels = f.map(d=>{
+    const dt=new Date(d.recorded_at);
+    return dt.toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
+  });
+  const profitV = f.map(d=>parseFloat(d.profit||0));
+  const ctx = document.getElementById('detailChart').getContext('2d');
+
+  // Gradient fill
+  const g = ctx.createLinearGradient(0,0,0,280);
+  g.addColorStop(0, color+'55'); g.addColorStop(1, color+'00');
+
+  // Zero baseline
+  const zeroColor = 'rgba(90,122,142,0.3)';
+
+  detailChart = new Chart(ctx,{
+    type:'line',
+    data:{
+      labels,
+      datasets:[{
+        label:'Profit ($)',
+        data:profitV,
+        borderColor:color,
+        backgroundColor:g,
+        borderWidth:2,
+        pointRadius: f.length>60 ? 0 : 3,
+        pointBackgroundColor:color,
+        pointBorderColor: 'var(--void)',
+        pointBorderWidth:1,
+        fill:true,
+        tension:0.4,
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      interaction:{intersect:false, mode:'index'},
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'#060c12',
+          borderColor: color+'80',
+          borderWidth:1,
+          titleColor:'#5a7a8e',
+          bodyColor:'#c8dce8',
+          titleFont:{family:'DM Mono',size:9},
+          bodyFont:{family:'DM Mono',size:11},
+          padding:12,
+          callbacks:{
+            label:c=>`PROFIT: ${c.parsed.y>=0?'+':''}$${c.parsed.y.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`
+          }
+        }
+      },
+      scales:{
+        x:{
+          grid:{color:'rgba(15,32,48,0.8)', borderColor:'transparent'},
+          ticks:{color:'#2a4458', font:{family:'DM Mono',size:8}, maxTicksLimit:10}
+        },
+        y:{
+          grid:{color:'rgba(15,32,48,0.8)', borderColor:'transparent'},
+          ticks:{
+            color:'#2a4458',
+            font:{family:'DM Mono',size:8},
+            callback: v=>(v>=0?'+$':'-$')+Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:0})
+          }
+        }
+      }
+    }
+  });
+}
+
+function filterRange(data, range){
+  if(range==='all'||!data) return data;
+  const now=new Date(), cut=new Date();
+  if(range==='1w') cut.setDate(now.getDate()-7);
+  if(range==='1m') cut.setMonth(now.getMonth()-1);
+  if(range==='3m') cut.setMonth(now.getMonth()-3);
+  return data.filter(d=>new Date(d.recorded_at)>=cut);
+}
+
+function setRange(r){
+  currentRange=r;
+  ['all','3m','1m','1w'].forEach(x=>{
+    document.getElementById('r-'+x).className = x===r?'range-btn active':'range-btn';
+  });
+  if(currentEA) buildDetailChart(allEquity[currentEA], EA_CONFIG[currentEA].color);
+}
+
 // ── INIT ──
 async function init(){
-  // ถ้ากลับมาจากหน้าย่อยใดก็ตาม ให้ข้าม loading screen ทันที
-  const fromSub = sessionStorage.getItem('fromPortfolio') ||
-                  sessionStorage.getItem('fromPromo') ||
-                  sessionStorage.getItem('fromCoach');
-  if(fromSub){
-    sessionStorage.removeItem('fromPortfolio');
-    sessionStorage.removeItem('fromPromo');
-    sessionStorage.removeItem('fromCoach');
-    document.getElementById('loading').style.display = 'none';
-  }
-
   await Promise.all(Object.keys(EA_CONFIG).map(async key=>{
-    const stats = await fetchSupa(`${key}_daily_stats`, 'order=recorded_at.desc&limit=1');
-    allData[key] = stats;
+    const [stats, equity] = await Promise.all([
+      fetchSupa(`${key}_daily_stats`,  'order=recorded_at.desc&limit=1'),
+      fetchSupa(`${key}_equity_curve`, 'order=recorded_at.asc&limit=730')
+    ]);
+    allData[key]   = stats;
+    allEquity[key] = equity;
+    renderCard(key, stats, equity);
   }));
+  renderHero();
   renderMainCards();
 
-  if(!fromSub){
-    setTimeout(()=>{
-      const o = document.getElementById('loading');
-      o.style.opacity='0';
-      setTimeout(()=>o.style.display='none', 1400);
-    }, 2800);
-  }
+  setTimeout(()=>{
+    const o = document.getElementById('loading');
+    o.style.opacity='0';
+    setTimeout(()=>o.style.display='none', 1400);
+  }, 2800);
 }
 
 // ── STARFIELD ──
@@ -1549,8 +1809,6 @@ async function init(){
   }
   frame();
 })();
-
-init();
 
 init();
 </script>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EntryPlan Academy — Systems Online</title>
+<title>EntryPlan Academy — Our Coaches</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,600;0,700;1,300&family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -925,298 +925,471 @@ header::after {
 .corner-bl { bottom: 0; left: 0; border-bottom: 1px solid var(--cyan); border-left: 1px solid var(--cyan); opacity: 0.5; }
 .corner-br { bottom: 0; right: 0; border-bottom: 1px solid var(--cyan); border-right: 1px solid var(--cyan); opacity: 0.5; }
 </style>
+<style>
+/* ════════════════════════════════
+   COACH PAGE LAYOUT
+════════════════════════════════ */
+.coaches-wrap {
+  max-width: 1100px; margin: 0 auto; padding: 40px 40px 60px;
+}
+.coaches-eyebrow {
+  font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 4px;
+  color: var(--cyan); text-transform: uppercase; margin-bottom: 32px;
+  display: flex; align-items: center; gap: 10px;
+}
+.coaches-eyebrow::before { content: '//'; opacity: 0.5; }
+
+/* ── GRID ── */
+.coach-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+/* ── CARD ── */
+.coach-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  position: relative;
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  display: flex; flex-direction: column;
+}
+.coach-card::after {
+  content: ''; position: absolute; top: 0; right: 0;
+  width: 14px; height: 14px;
+  border-left: 1px solid var(--border2); border-bottom: 1px solid var(--border2);
+  pointer-events: none;
+}
+.coach-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--cyan);
+  box-shadow: 0 0 28px var(--cyan-dim), 0 16px 32px rgba(0,0,0,0.4);
+}
+.coach-card-accent {
+  height: 2px;
+  background: linear-gradient(90deg, var(--cyan), transparent);
+  opacity: 0.5; transition: opacity 0.25s;
+}
+.coach-card:hover .coach-card-accent { opacity: 1; }
+
+.coach-card-body { padding: 22px 20px 16px; flex: 1; }
+
+.coach-card-avatar {
+  width: 60px; height: 60px; border-radius: 50%;
+  border: 1px solid rgba(0,212,255,0.2); background: var(--surface);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; margin-bottom: 16px; position: relative;
+  box-shadow: 0 0 18px rgba(0,212,255,0.08);
+}
+.coach-card-avatar::after {
+  content: ''; position: absolute; inset: -4px; border-radius: 50%;
+  border: 1px solid transparent;
+  border-top-color: rgba(0,212,255,0.35);
+  animation: spin 8s linear infinite;
+}
+.coach-card-name {
+  font-family: 'Inter', sans-serif; font-size: 17px; font-weight: 700;
+  color: var(--text); letter-spacing: -0.3px; margin-bottom: 4px;
+}
+.coach-card-role {
+  font-family: 'DM Mono', monospace; font-size: 8.5px; letter-spacing: 1.8px;
+  color: var(--cyan); text-transform: uppercase; margin-bottom: 12px;
+}
+.coach-card-specialty {
+  font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 300;
+  color: var(--text3); line-height: 1.65;
+}
+.coach-card-foot {
+  padding: 10px 20px 12px;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: auto;
+}
+.coach-card-foot-label {
+  font-family: 'DM Mono', monospace; font-size: 8.5px; letter-spacing: 1.5px;
+  color: var(--text3); text-transform: uppercase;
+  transition: color 0.2s;
+}
+.coach-card:hover .coach-card-foot-label { color: var(--cyan); }
+.coach-card-foot-icon {
+  font-size: 13px; color: var(--cyan); opacity: 0.5;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.coach-card:hover .coach-card-foot-icon { opacity: 1; transform: scale(1.15); }
+
+/* ════════════════════════════════
+   MODAL
+════════════════════════════════ */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(2,5,8,0.88);
+  backdrop-filter: blur(12px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s;
+}
+.modal-overlay.open {
+  opacity: 1; pointer-events: all;
+}
+
+.modal-box {
+  background: var(--deep);
+  border: 1px solid var(--border2);
+  width: 100%; max-width: 720px;
+  max-height: 88vh;
+  overflow-y: auto;
+  position: relative;
+  clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%);
+  transform: translateY(16px) scale(0.98);
+  transition: transform 0.28s cubic-bezier(.4,0,.2,1);
+}
+.modal-overlay.open .modal-box {
+  transform: translateY(0) scale(1);
+}
+.modal-box::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--cyan), var(--gold), transparent);
+}
+
+/* nav arrows */
+.modal-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  z-index: 10; background: rgba(8,15,24,0.9);
+  border: 1px solid var(--border2);
+  color: var(--text2); font-size: 16px;
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.2s;
+  clip-path: none;
+}
+.modal-nav:hover { border-color: var(--cyan); color: var(--cyan); background: var(--surface); }
+.modal-nav.prev { left: -52px; }
+.modal-nav.next { right: -52px; }
+.modal-nav:disabled { opacity: 0.2; pointer-events: none; }
+
+.modal-close {
+  position: absolute; top: 14px; right: 20px; z-index: 10;
+  background: none; border: 1px solid var(--border2);
+  color: var(--text3); font-size: 14px; font-family: 'DM Mono', monospace;
+  padding: 4px 10px; cursor: pointer; letter-spacing: 1px;
+  transition: all 0.2s;
+}
+.modal-close:hover { border-color: var(--red); color: var(--red); }
+
+.modal-counter {
+  position: absolute; top: 18px; left: 20px;
+  font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 2px;
+  color: var(--text3); text-transform: uppercase;
+}
+
+.modal-body { padding: 52px 40px 36px; }
+
+/* hero row */
+.modal-hero {
+  display: flex; align-items: flex-start; gap: 28px;
+  margin-bottom: 28px; padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+.modal-avatar {
+  width: 80px; height: 80px; border-radius: 50%; flex-shrink: 0;
+  border: 1px solid rgba(0,212,255,0.2); background: var(--surface);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 34px; position: relative;
+  box-shadow: 0 0 28px rgba(0,212,255,0.1);
+}
+.modal-avatar::after {
+  content: ''; position: absolute; inset: -5px; border-radius: 50%;
+  border: 1px solid transparent;
+  border-top-color: var(--cyan); border-right-color: rgba(0,212,255,0.2);
+  animation: spin 6s linear infinite;
+}
+.modal-name {
+  font-family: 'Inter', sans-serif; font-size: 32px; font-weight: 700;
+  letter-spacing: -0.5px; color: var(--text); margin-bottom: 5px;
+}
+.modal-role {
+  font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2.5px;
+  color: var(--cyan); text-transform: uppercase; margin-bottom: 12px;
+}
+.modal-bio {
+  font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 300;
+  color: var(--text2); line-height: 1.85; white-space: pre-line;
+}
+
+/* stats */
+.modal-stats {
+  display: grid; gap: 1px; background: var(--border);
+  margin-bottom: 22px;
+}
+.modal-stat-box {
+  background: var(--panel); padding: 16px 20px; text-align: center;
+}
+.modal-stat-box .val {
+  font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 700;
+  color: var(--cyan); text-shadow: 0 0 14px rgba(0,212,255,0.3); line-height: 1;
+}
+.modal-stat-box .lbl {
+  font-family: 'Inter', sans-serif; font-size: 9px; color: var(--text3);
+  letter-spacing: 1px; margin-top: 4px; text-transform: uppercase;
+}
+
+/* tags */
+.modal-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.modal-tag {
+  font-family: 'DM Mono', monospace; font-size: 8.5px; letter-spacing: 1.5px;
+  color: var(--text3); text-transform: uppercase;
+  border: 1px solid var(--border2); padding: 5px 12px;
+  transition: border-color 0.2s, color 0.2s;
+}
+.modal-tag:hover { border-color: var(--cyan); color: var(--cyan); }
+
+/* ── RESPONSIVE ── */
+@media(max-width: 1024px) {
+  .coach-grid { grid-template-columns: repeat(2, 1fr); }
+  .modal-nav.prev { left: -44px; }
+  .modal-nav.next { right: -44px; }
+}
+@media(max-width: 768px) {
+  .coach-grid { grid-template-columns: 1fr 1fr; }
+  .coaches-wrap { padding: 24px 16px 48px; }
+  .modal-overlay { padding: 12px; align-items: flex-end; }
+  .modal-box { max-height: 92vh; clip-path: none; }
+  .modal-body { padding: 48px 20px 28px; }
+  .modal-hero { flex-direction: column; gap: 16px; }
+  .modal-name { font-size: 26px; }
+  .modal-nav { display: none; }
+}
+@media(max-width: 480px) {
+  .coach-grid { grid-template-columns: 1fr; }
+}
+</style>
 </head>
 <body>
 
-<!-- ── LOADING ── -->
 <canvas id="cv"></canvas>
 <canvas id="ship-cv"></canvas>
 <div class="neb neb-a"></div>
 <div class="neb neb-b"></div>
-<div id="loading">
-  <div class="ld-orrery"><div class="ld-core"></div></div>
-  <div class="ld-wordmark">Entry<em>Plan</em></div>
-  <div class="ld-sub">Academy · Systems Online</div>
-  <div class="ld-track"><div class="ld-fill"></div></div>
-  <div class="ld-status">Calibrating data streams&hellip;</div>
+
+<!-- PAGE WRAPPER -->
+<div style="position:relative; z-index:2; min-height:100vh;">
+
+  <!-- HEADER -->
+  <div class="gen-header">
+    <button class="btn-back" onclick="goBack()">◄ BACK</button>
+    <div style="font-family:'Cormorant',serif;font-size:18px;font-weight:300;letter-spacing:6px;color:var(--text)">OUR COACHES</div>
+    <div id="coach-count" style="font-family:'DM Mono',monospace;font-size:8px;color:var(--text3);letter-spacing:2px">— INSTRUCTORS</div>
+  </div>
+
+  <!-- GRID -->
+  <div class="coaches-wrap">
+    <div class="coaches-eyebrow">Instructor Roster</div>
+    <div id="coach-grid" class="coach-grid"></div>
+  </div>
+
 </div>
 
-<!-- ── APP ── -->
-<div id="app">
-
-<!-- HEADER -->
-<header>
-  <div class="logo">
-    <div class="logo-orb"><div class="logo-dot"></div></div>
-    <div class="logo-copy">
-      <div class="logo-main">Entry<em>Plan</em></div>
-      <div class="logo-tag">Academy · Observatory</div>
-    </div>
+<!-- MODAL -->
+<div id="modal-overlay" class="modal-overlay" onclick="handleOverlayClick(event)">
+  <button class="modal-nav prev" id="btn-prev" onclick="event.stopPropagation(); navigate(-1)">‹</button>
+  <div class="modal-box" id="modal-box">
+    <span class="modal-counter" id="modal-counter"></span>
+    <button class="modal-close" onclick="closeModal()">✕ ESC</button>
+    <div class="modal-body" id="modal-body"></div>
   </div>
-  <div class="header-right">
-    <div class="sys-status"><div class="sys-dot"></div>ALL SYSTEMS ONLINE</div>
-    <div class="hdr-time" id="live-clock">--:--:--</div>
-    <div class="hdr-corner"></div>
-  </div>
-</header>
-
-<!-- ── ABOUT ── -->
-<section class="about-section">
-  <div class="about-bg">EPA</div>
-  <div class="about-inner">
-    <div>
-      <div class="about-eyebrow">Est. 2021 · Thailand</div>
-      <div class="about-name">Entry<em>Plan</em><br>Academy</div>
-      <div class="about-divider"></div>
-      <div class="about-stats">
-        <div>
-          <div class="about-stat-num">500+</div>
-          <div class="about-stat-lbl">นักเรียน</div>
-        </div>
-        <div>
-          <div class="about-stat-num">3+</div>
-          <div class="about-stat-lbl">ปีประสบการณ์</div>
-        </div>
-        <div>
-          <div class="about-stat-num">3</div>
-          <div class="about-stat-lbl">Live EAs</div>
-        </div>
-      </div>
-    </div>
-    <div class="about-body">
-      <p>
-        <strong>EntryPlan Academy</strong> คือสถาบันสอนเทรด Forex และ Gold
-        ที่ก่อตั้งขึ้นด้วยเป้าหมายเดียว — สร้างนักเทรดมืออาชีพที่มีวินัย
-        มีระบบ และสามารถทำกำไรได้อย่างยั่งยืนในระยะยาว
-      </p>
-      <p>
-        เราพัฒนา <strong>Expert Advisor (EA)</strong> ที่ผ่านการทดสอบและรันจริงบนบัญชี Live
-        เพื่อให้นักเรียนเห็นผลลัพธ์จริง ไม่ใช่แค่ Backtest
-        ทุก EA ที่แสดงในหน้านี้คือระบบที่ทีมใช้งานจริงอยู่ในปัจจุบัน
-      </p>
-      <p>
-        หลักสูตรครอบคลุมตั้งแต่ Price Action ขั้นพื้นฐาน
-        จนถึงการเขียน MQL5 เพื่อสร้าง Automated Trading System ของตัวเอง
-        พร้อม mentorship รายสัปดาห์จากโค้ชโดยตรง
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- ── 3 MAIN CARDS ── -->
-<div class="main-grid-wrap">
-  <div class="section-header">
-    <div class="section-title">// Services</div>
-    <div class="section-line"></div>
-    <div class="section-num">[ 3 MODULES ]</div>
-  </div>
-
-  <div class="main-grid">
-
-    <!-- CARD: PROMOTION -->
-    <div class="ea-card gold-card" onclick="window.location.href='promotion.html'" style="cursor:pointer">
-      <div class="corner-tl"></div>
-      <div class="card-accent-bar bar-gold"></div>
-      <div class="card-head">
-        <div>
-          <div class="card-name gold">PROMOTION</div>
-          <div class="card-port">SPECIAL ACCESS // LIMITED</div>
-        </div>
-        <div class="card-live" style="background:rgba(240,180,41,0.1);border-color:rgba(240,180,41,0.3);color:var(--gold)">
-          <div class="card-live-dot" style="background:var(--gold);box-shadow:0 0 4px var(--gold)"></div>OPEN
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="card-profit-label">// HIGHLIGHT</div>
-        <div class="card-profit-value gold" style="font-size:28px;line-height:1.2">เทรดกับ<br>มืออาชีพ</div>
-        <div class="card-metrics" style="margin-top:16px">
-          <div class="metric">
-            <div class="metric-label">สัญญาณเทรด</div>
-            <div class="metric-value gold">Real-time</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Mentorship</div>
-            <div class="metric-value gold">1-on-1</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">EA Access</div>
-            <div class="metric-value gold">Full</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Community</div>
-            <div class="metric-value gold">Pro</div>
-          </div>
-        </div>
-      </div>
-      <div class="card-foot">
-        <button class="btn-view">ดูรายละเอียด <span class="btn-view-arr">→</span></button>
-      </div>
-    </div>
-
-    <!-- CARD: COACH -->
-    <div class="ea-card cyan-card" onclick="window.location.href='coach.html'" style="cursor:pointer">
-      <div class="corner-tl"></div>
-      <div class="card-accent-bar bar-cyan"></div>
-      <div class="card-head">
-        <div>
-          <div class="card-name cyan">HEAD COACH</div>
-          <div class="card-port">FOUNDER // LEAD STRATEGIST</div>
-        </div>
-        <div class="card-live"><div class="card-live-dot"></div>ACTIVE</div>
-      </div>
-      <div class="card-body">
-        <div class="card-profit-label">// INSTRUCTOR</div>
-        <div class="card-profit-value cyan" style="font-size:28px">Coach Nhum</div>
-        <div class="card-metrics" style="margin-top:16px">
-          <div class="metric">
-            <div class="metric-label">ประสบการณ์</div>
-            <div class="metric-value cyan">3+ ปี</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Specialty</div>
-            <div class="metric-value cyan">XAUUSD</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">นักเรียน</div>
-            <div class="metric-value cyan">500+</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Live EAs</div>
-            <div class="metric-value cyan">3 ระบบ</div>
-          </div>
-        </div>
-      </div>
-      <div class="card-foot">
-        <button class="btn-view">ดูโปรไฟล์ <span class="btn-view-arr">→</span></button>
-      </div>
-    </div>
-
-    <!-- CARD: EA PORTFOLIO -->
-    <div class="ea-card purple-card" onclick="window.location.href='portfolio.html'" style="cursor:pointer">
-      <div class="corner-tl"></div>
-      <div class="card-accent-bar bar-purple"></div>
-      <div class="card-head">
-        <div>
-          <div class="card-name purple">EA PORTFOLIO</div>
-          <div class="card-port">LIVE SYSTEMS // XAUUSD</div>
-        </div>
-        <div class="card-live"><div class="card-live-dot"></div>LIVE</div>
-      </div>
-      <div class="card-body">
-        <div class="card-profit-label">// COMBINED PROFIT</div>
-        <div class="card-profit-value green" id="main-total-pnl">—</div>
-        <div class="card-metrics" style="margin-top:16px">
-          <div class="metric">
-            <div class="metric-label">Active EAs</div>
-            <div class="metric-value" style="color:var(--purple)">03</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Monthly</div>
-            <div class="metric-value green" id="main-month-pnl">—</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Portfolios</div>
-            <div class="metric-value" style="color:var(--purple)">3/3</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Status</div>
-            <div class="metric-value green">ONLINE</div>
-          </div>
-        </div>
-      </div>
-      <div class="card-foot">
-        <button class="btn-view">ดู EA ทั้งหมด <span class="btn-view-arr">→</span></button>
-      </div>
-    </div>
-
-  </div>
+  <button class="modal-nav next" id="btn-next" onclick="event.stopPropagation(); navigate(1)">›</button>
 </div>
-
-</div><!-- app -->
-
-
-</div><!-- app -->
 
 <script>
-const SUPA_URL = 'https://stdvqepkkkeehojstfww.supabase.co';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0ZHZxZXBra2tlZWhvanN0Znd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyNTE5MjMsImV4cCI6MjA4NzgyNzkyM30.g25XS-O44n-Nf01-pRKy3pBH4OpYwQ7nbia67vHtx04';
+// ════════════════════════════════════════════
+// ── COACH DATA — แก้ไขเพิ่ม/ลด coach ตรงนี้
+// ════════════════════════════════════════════
+const COACHES = [
+  {
+    id: 'nhum',
+    emoji: '👨‍💼',
+    name: 'Coach Nhum',
+    role: 'Founder · Lead Strategist',
+    specialty: 'เชี่ยวชาญ XAUUSD · Grid Martingale · MQL5 Development',
+    bio: `นักเทรด Forex และ Gold มืออาชีพ ผู้เชี่ยวชาญด้าน Price Action
+และการพัฒนา Automated Trading System ด้วย MQL4/MQL5
+มีประสบการณ์บริหารพอร์ตจริงมากกว่า 3 ปี ด้วยกลยุทธ์ Grid Martingale
+ที่มีระบบบริหารความเสี่ยงขั้นสูง พร้อมสอนนักเรียนให้เข้าใจตลาดและ
+สร้างระบบเทรดของตัวเองได้จริง`,
+    stats: [
+      { val: '3+', lbl: 'Years Live Trading' },
+      { val: '500+', lbl: 'Students Trained' },
+      { val: '3', lbl: 'Active EA Systems' },
+    ],
+    tags: ['Price Action', 'MQL4 / MQL5', 'XAUUSD', 'Grid Martingale', 'Risk Management', 'Automated Trading'],
+  },
+  {
+    id: 'fah',
+    emoji: '👩‍💻',
+    name: 'Coach Fah',
+    role: 'Senior Analyst · Forex Specialist',
+    specialty: 'เชี่ยวชาญ EUR/USD · USD/JPY · Technical Analysis',
+    bio: `นักวิเคราะห์ Forex อาวุโส มีประสบการณ์เทรดในตลาด Major Pairs มากกว่า 4 ปี
+เชี่ยวชาญด้าน Multi-Timeframe Analysis และ Smart Money Concept
+ดูแลหลักสูตรสำหรับนักเรียนระดับกลาง-สูง ที่ต้องการเจาะลึกการอ่านกราฟและ
+วางแผนเทรดให้มีความสม่ำเสมอในระยะยาว`,
+    stats: [
+      { val: '4+', lbl: 'Years Experience' },
+      { val: '200+', lbl: 'Students' },
+      { val: '85%', lbl: 'Avg Win Rate' },
+    ],
+    tags: ['Smart Money Concept', 'EUR/USD', 'USD/JPY', 'Multi-TF Analysis', 'Forex', 'Technical Analysis'],
+  },
+  {
+    id: 'arm',
+    emoji: '🧑‍🏫',
+    name: 'Coach Arm',
+    role: 'EA Developer · Quant Trader',
+    specialty: 'เชี่ยวชาญ MQL5 · Backtesting · Strategy Optimization',
+    bio: `นักพัฒนา Expert Advisor และ Quantitative Trader ที่มีความเชี่ยวชาญด้าน
+การเขียน MQL5 ขั้นสูง ออกแบบ Logic การเทรดที่ซับซ้อน พร้อมระบบ Risk Management
+ที่แม่นยำ มีประสบการณ์ Optimize EA บน Walk-Forward Analysis และสอนนักเรียน
+ให้พัฒนาระบบเทรดของตัวเองได้ตั้งแต่ศูนย์`,
+    stats: [
+      { val: '5+', lbl: 'Years Coding' },
+      { val: '10+', lbl: 'EAs Built' },
+      { val: '150+', lbl: 'Students' },
+    ],
+    tags: ['MQL5', 'Backtesting', 'Walk-Forward', 'Strategy Optimization', 'Quant', 'Risk Management'],
+  },
+  {
+    id: 'pom',
+    emoji: '👩‍🏫',
+    name: 'Coach Pom',
+    role: 'Fundamental Analyst · Macro Trader',
+    specialty: 'เชี่ยวชาญ News Trading · Macro Economics · Gold Driver',
+    bio: `ผู้เชี่ยวชาญด้าน Fundamental Analysis และ Macro Economics มีความเข้าใจ
+เชิงลึกเกี่ยวกับ Economic Indicators ที่ขับเคลื่อนราคาทองคำและ Forex
+สอนนักเรียนให้เข้าใจว่า News และ Data สำคัญอย่างไรต่อการเคลื่อนไหวของราคา
+และวิธีผสมผสาน Fundamental กับ Technical ให้เป็นระบบเดียวกัน`,
+    stats: [
+      { val: '3+', lbl: 'Years Experience' },
+      { val: '120+', lbl: 'Students' },
+      { val: '6', lbl: 'Macro Models' },
+    ],
+    tags: ['Fundamental Analysis', 'News Trading', 'Gold Driver', 'CPI/NFP', 'Macro Economics', 'XAUUSD'],
+  },
+  {
+    id: 'max',
+    emoji: '🧑‍💼',
+    name: 'Coach Max',
+    role: 'Risk Manager · Portfolio Advisor',
+    specialty: 'เชี่ยวชาญ Position Sizing · Portfolio Management · Psychology',
+    bio: `ผู้เชี่ยวชาญด้านการบริหารความเสี่ยงและจิตวิทยาการเทรด มีแนวคิดที่ชัดเจน
+ว่าการรอดในตลาดระยะยาวไม่ได้ขึ้นอยู่กับ Strategy เพียงอย่างเดียว
+แต่ขึ้นอยู่กับ Discipline และ Position Sizing ที่ถูกต้อง
+สอนนักเรียนให้มี Mindset และ Process ที่นำไปสู่ความสม่ำเสมอในการทำกำไร`,
+    stats: [
+      { val: '5+', lbl: 'Years Trading' },
+      { val: '180+', lbl: 'Students' },
+      { val: '< 5%', lbl: 'Max Monthly DD' },
+    ],
+    tags: ['Position Sizing', 'Portfolio Mgmt', 'Trading Psychology', 'Risk Control', 'Discipline', 'Drawdown Mgmt'],
+  },
+];
 
-const EA_CONFIG = {
-  gradea:   { name:'GRADE A',   port:'501412', prefix:'ga', color:'#f0b429', nameClass:'gold'   },
-  blackhole:{ name:'BLACKHOLE', port:'501425', prefix:'bh', color:'#00d4ff', nameClass:'cyan'   },
-  bigbang:  { name:'BIGBANG',   port:'501427', prefix:'bb', color:'#8b5cf6', nameClass:'purple' },
-};
+// ── STATE ──
+let currentIdx = null;
 
-let allData = {};
+// ── RENDER GRID ──
+function renderGrid() {
+  const grid = document.getElementById('coach-grid');
+  document.getElementById('coach-count').textContent = COACHES.length + ' INSTRUCTOR' + (COACHES.length > 1 ? 'S' : '');
+  grid.innerHTML = COACHES.map((c, i) => `
+    <div class="coach-card" onclick="openModal(${i})">
+      <div class="coach-card-accent"></div>
+      <div class="coach-card-body">
+        <div class="coach-card-avatar">${c.emoji}</div>
+        <div class="coach-card-name">${c.name}</div>
+        <div class="coach-card-role">${c.role}</div>
+        <div class="coach-card-specialty">${c.specialty}</div>
+      </div>
+      <div class="coach-card-foot">
+        <span class="coach-card-foot-label">View Profile</span>
+        <span class="coach-card-foot-icon">⊕</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── MODAL CONTENT ──
+function renderModal(i) {
+  const c = COACHES[i];
+  document.getElementById('modal-counter').textContent = (i + 1) + ' / ' + COACHES.length;
+  document.getElementById('btn-prev').disabled = i === 0;
+  document.getElementById('btn-next').disabled = i === COACHES.length - 1;
+  document.getElementById('modal-body').innerHTML = `
+    <div class="modal-hero">
+      <div class="modal-avatar">${c.emoji}</div>
+      <div>
+        <div class="modal-name">${c.name}</div>
+        <div class="modal-role">${c.role}</div>
+        <div class="modal-bio">${c.bio}</div>
+      </div>
+    </div>
+    <div class="modal-stats" style="grid-template-columns:repeat(${c.stats.length},1fr)">
+      ${c.stats.map(s => `<div class="modal-stat-box"><div class="val">${s.val}</div><div class="lbl">${s.lbl}</div></div>`).join('')}
+    </div>
+    <div class="modal-tags">
+      ${c.tags.map(t => `<span class="modal-tag">${t}</span>`).join('')}
+    </div>
+  `;
+  // scroll modal to top on switch
+  document.getElementById('modal-box').scrollTop = 0;
+}
+
+function openModal(i) {
+  currentIdx = i;
+  renderModal(i);
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  currentIdx = null;
+}
+
+function navigate(dir) {
+  const next = currentIdx + dir;
+  if (next >= 0 && next < COACHES.length) openModal(next);
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+// keyboard nav
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('modal-overlay').classList.contains('open')) return;
+  if (e.key === 'Escape') closeModal();
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') navigate(1);
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   navigate(-1);
+});
+
+function goBack() {
+  sessionStorage.setItem('fromCoach', '1');
+  window.location.href = 'index.html';
+}
 
 // ── CLOCK ──
-function updateClock(){
-  const now = new Date();
-  document.getElementById('live-clock').textContent =
-    now.toLocaleTimeString('en-GB',{hour12:false}) + ' UTC+7';
+function updateClock() {
+  const el = document.getElementById('live-clock');
+  if (el) el.textContent = new Date().toLocaleTimeString('en-GB', { hour12: false }) + ' UTC+7';
 }
 setInterval(updateClock, 1000);
 updateClock();
 
-// ── FETCH ──
-async function fetchSupa(table, query=''){
-  try{
-    const r = await fetch(`${SUPA_URL}/rest/v1/${table}?${query}`,{
-      headers:{'apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`}
-    });
-    return r.ok ? r.json() : [];
-  }catch(e){ return []; }
-}
-
-// ── FORMAT ──
-function fUSD(v){
-  if(v===null||v===undefined)return'—';
-  const s=v>=0?'+':'-';
-  return`${s}$${Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
-}
-
-// ── RENDER MAIN EA PORTFOLIO CARD ──
-function renderMainCards(){
-  let tp=0, tm=0;
-  Object.keys(allData).forEach(k=>{
-    const d = allData[k]&&allData[k].length>0 ? allData[k][0] : null;
-    if(!d) return;
-    tp += parseFloat(d.total_pnl||0);
-    tm += parseFloat(d.monthly_pnl||0);
-  });
-  const tEl = document.getElementById('main-total-pnl');
-  if(tEl){ tEl.textContent=fUSD(tp); tEl.className='card-profit-value '+(tp>=0?'green':'red'); }
-  const mEl = document.getElementById('main-month-pnl');
-  if(mEl){ mEl.textContent=fUSD(tm); mEl.className='metric-value '+(tm>=0?'green':'red'); }
-}
-
-// ── INIT ──
-async function init(){
-  // ถ้ากลับมาจากหน้าย่อยใดก็ตาม ให้ข้าม loading screen ทันที
-  const fromSub = sessionStorage.getItem('fromPortfolio') ||
-                  sessionStorage.getItem('fromPromo') ||
-                  sessionStorage.getItem('fromCoach');
-  if(fromSub){
-    sessionStorage.removeItem('fromPortfolio');
-    sessionStorage.removeItem('fromPromo');
-    sessionStorage.removeItem('fromCoach');
-    document.getElementById('loading').style.display = 'none';
-  }
-
-  await Promise.all(Object.keys(EA_CONFIG).map(async key=>{
-    const stats = await fetchSupa(`${key}_daily_stats`, 'order=recorded_at.desc&limit=1');
-    allData[key] = stats;
-  }));
-  renderMainCards();
-
-  if(!fromSub){
-    setTimeout(()=>{
-      const o = document.getElementById('loading');
-      o.style.opacity='0';
-      setTimeout(()=>o.style.display='none', 1400);
-    }, 2800);
-  }
-}
+renderGrid();
 
 // ── STARFIELD ──
 (function(){
@@ -1553,6 +1726,9 @@ async function init(){
 init();
 
 init();
+
+
+
 </script>
 </body>
 </html>
